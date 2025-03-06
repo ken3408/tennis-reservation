@@ -1,0 +1,457 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #fafafa;
+    color: #1d1b20;
+    line-height: 1.5;
+  }
+
+  .app-container {
+    max-width: 430px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  /* App Header */
+  .app-header {
+    background-color: #ffffff;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .header-title {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #1d1b20;
+  }
+
+  .icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .menu-icon,
+  .user-icon {
+    color: #79747e;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    height: 288px;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: flex-end;
+    padding: 24px;
+  }
+
+  .hero-title {
+    font-size: 48px;
+    font-weight: 300;
+    color: white;
+    letter-spacing: 2px;
+  }
+
+  /* Content Section */
+  .content-section {
+    padding: 32px 20px;
+    background-color: #ffffff;
+  }
+
+  /* Section Title */
+  .section-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+
+  .title-line {
+    height: 1px;
+    background-color: #e0e0e0;
+    flex-grow: 1;
+    max-width: 60px;
+  }
+
+  .title-wrapper {
+    padding: 0 16px;
+  }
+
+  .section-title {
+    font-size: 24px;
+    font-weight: 300;
+    text-align: center;
+    letter-spacing: 1px;
+    color: #1d1b20;
+  }
+
+  .title-accent {
+    color: #62bfad;
+    font-weight: 400;
+  }
+
+  /* Date Time Container */
+  .date-time-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background-color: #f9f9f9;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin: 12px auto;
+    width: fit-content;
+  }
+
+  .date-container,
+  .time-container {
+    display: flex;
+    align-items: center;
+    color: #666666;
+  }
+
+  .calendar-icon,
+  .clock-icon {
+    margin-right: 6px;
+    color: #62bfad;
+  }
+
+  .date-text,
+  .time-text {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .divider {
+    height: 12px;
+    width: 1px;
+    background-color: #dddddd;
+  }
+
+  /* Class Navigation */
+  .class-navigation {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .nav-button {
+    flex: 1;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-button-active {
+    background-color: #62bfad;
+    color: white;
+    border: none;
+  }
+
+  .nav-button:not(.nav-button-active) {
+    background-color: white;
+    color: #666666;
+    border: 2px solid #e0e0e0;
+  }
+
+  .nav-button:hover {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  }
+
+  .chevron-left,
+  .chevron-right {
+    stroke-width: 2;
+  }
+
+  /* Class List */
+  .class-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .class-card {
+    display: flex;
+    align-items: center;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+    background-color: white;
+  }
+
+  .class-card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .class-card-canceled {
+    background-color: #e0e0e0;
+    opacity: 0.95;
+  }
+
+  .class-number-container {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, rgba(98, 191, 173, 0.1), rgba(98, 191, 173, 0.2));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .class-number-container-canceled {
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    opacity: 0.7;
+  }
+
+  .class-number {
+    font-size: 36px;
+    font-weight: 300;
+    color: #62bfad;
+  }
+
+  .class-number-canceled {
+    color: #a0a0a0;
+  }
+
+  .class-info {
+    flex: 1;
+  }
+
+  .class-level {
+    font-size: 18px;
+    font-weight: 500;
+    color: #1d1b20;
+    display: flex;
+    align-items: center;
+  }
+
+  .class-level-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .class-level-canceled {
+    color: #666666;
+  }
+
+  .award-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    color: #62bfad;
+  }
+
+  .award-icon-canceled {
+    color: #a0a0a0;
+  }
+
+  .coach-name {
+    font-size: 14px;
+    color: #79747e;
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+  }
+
+  .user-circle-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+    color: #a0a0a0;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+
+  .status-badge-available {
+    background-color: rgba(98, 191, 173, 0.1);
+    color: #62bfad;
+  }
+
+  .status-badge-full {
+    background-color: #fee2e2;
+    color: #b91c1c;
+  }
+
+  .status-badge-limited {
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+
+  .status-badge-unavailable {
+    background-color: #f3f4f6;
+    color: #6b7280;
+  }
+
+  .status-badge-canceled {
+    background-color: #e0f2fe;
+    color: #0369a1;
+  }
+
+  .class-action {
+    text-align: right;
+  }
+
+  .capacity-text {
+    font-size: 14px;
+    color: #79747e;
+    margin-bottom: 8px;
+  }
+
+  .capacity-text-canceled {
+    color: #a0a0a0;
+  }
+
+  .reserve-button,
+  .cancel-button {
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .reserve-button {
+    background-color: #62bfad;
+    color: white;
+    border: none;
+  }
+
+  .reserve-button:hover {
+    background-color: #56ab9a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  .cancel-button {
+    background-color: white;
+    color: #62bfad;
+    border: 2px solid #62bfad;
+  }
+
+  .cancel-button:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Bottom Navigation */
+  .bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px 0;
+    background-color: white;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .nav-icon-container {
+    width: 40px;
+    height: 40px;
+    background-color: #f3f4f6;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+  }
+
+  .nav-icon-container-active {
+    background-color: #62bfad;
+  }
+
+  .nav-icon {
+    color: #666666;
+  }
+
+  .nav-icon-active {
+    color: white;
+  }
+
+  .nav-text {
+    font-size: 12px;
+    margin-top: 6px;
+    color: #1d1b20;
+  }
+
+  .nav-text-inactive {
+    color: #79747e;
+  }
+
+  .nav-item:hover .nav-icon-container:not(.nav-icon-container-active) {
+    background-color: #e5e7eb;
+  }
+
+  .nav-item:hover .nav-text:not(.nav-text-active) {
+    color: #4b5563;
+  }
+
+  /* Home Indicator */
+  .home-indicator {
+    height: 4px;
+    width: 96px;
+    background-color: #d1d5db;
+    margin: 12px auto;
+    border-radius: 9999px;
+  }
+
