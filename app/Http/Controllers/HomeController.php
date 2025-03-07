@@ -11,7 +11,7 @@ class HomeController extends Controller
     {
         // ミドルウェアでセットされた `deviceType` を取得
         $deviceType = $request->get('deviceType', 'pc'); // デフォルトはPC
-        Log::info('Device Type in Controller: ' . $deviceType);
+
 
         return view($deviceType === 'sp' ? 'home_sp' : 'home_pc');
     }

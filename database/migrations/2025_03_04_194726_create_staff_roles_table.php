@@ -1,9 +1,10 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStudentRolesTable extends Migration
+class CreateStaffRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +13,7 @@ class CreateStudentRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_roles', function (Blueprint $table) {
+        Schema::create('staff_roles', function (Blueprint $table) {
             $table->id('role_id'); // ロールID (主キー)
             $table->string('role_name')->comment('ロール名: 管理者、コーチ、フロントスタッフ'); // ロール名
             $table->integer('permission_level')->comment('権限レベル'); // 権限レベル
@@ -27,6 +28,6 @@ class CreateStudentRolesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_roles');
+        Schema::dropIfExists('staff_roles');
     }
 }

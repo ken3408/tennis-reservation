@@ -112,7 +112,7 @@
           </p>
         </div>
         <div class="card-footer card-footer-base">
-          <button class="btn btn-primary btn-full">
+          <button class="btn btn-primary btn-full js-reservation-button">
             予約する
             <svg class="icon-xs" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M5 12h14"></path>

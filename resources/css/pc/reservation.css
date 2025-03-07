@@ -1,0 +1,300 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    color: #333;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .calendar-container {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 16px;
+  }
+
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .current-date {
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+  }
+
+  .calendar-icon {
+    margin-left: 8px;
+    padding: 4px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+  }
+
+  .nav-button {
+    padding: 8px;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .nav-button:hover {
+    background-color: #f7fafc;
+  }
+
+  /* 週表示のスタイル */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+
+  .week-day {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .week-day-header {
+    text-align: center;
+    padding: 8px;
+    font-weight: 500;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .week-day-date {
+    font-size: 16px;
+  }
+
+  .week-day-name {
+    font-size: 12px;
+    color: #718096;
+  }
+
+  .week-day-content {
+    padding: 8px;
+    min-height: 150px;
+  }
+
+  .time-slot {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+
+  .time-slot-holiday {
+    background-color: #ebf8ff;
+  }
+
+  .time-slot-japanese {
+    background-color: #fffbeb;
+  }
+
+  .time-slot-western {
+    background-color: #f0fff4;
+  }
+
+  .time-slot-basic {
+    background-color: #fff5f5;
+  }
+
+  .time-slot-time {
+    font-weight: 500;
+  }
+
+  .availability-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #10b981;
+    margin: 4px auto 0;
+  }
+
+  .no-reservations {
+    text-align: center;
+    padding: 16px 0;
+    color: #718096;
+    font-size: 12px;
+  }
+
+  .weekday-sun {
+    color: #e53e3e;
+  }
+
+  .weekday-sat {
+    color: #3182ce;
+  }
+
+  /* モーダルのスタイル */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal.show {
+    display: flex;
+  }
+
+  .modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-content-month {
+    max-width: 800px;
+    width: 90%;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #718096;
+  }
+
+  .modal-close:hover {
+    color: #2d3748;
+  }
+
+  .modal-calendar {
+    padding: 16px;
+  }
+
+  .modal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 8px;
+  }
+
+  .modal-weekday {
+    text-align: center;
+    font-weight: 500;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .modal-weekday:first-child {
+    color: #e53e3e;
+  }
+
+  .modal-weekday:last-child {
+    color: #3182ce;
+  }
+
+  .modal-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+
+  .modal-day {
+    min-height: 100px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .modal-day:hover {
+    background-color: #f7fafc;
+  }
+
+  .modal-day.other-month {
+    color: #a0aec0;
+    background-color: #f8f9fa;
+  }
+
+  .modal-day.today {
+    border-color: #10b981;
+    border-width: 2px;
+  }
+
+  .modal-day.selected {
+    background-color: #e6fffa;
+  }
+
+  .modal-day-number {
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .modal-day-content {
+    font-size: 11px;
+  }
+
+  .modal-time-slot {
+    margin-bottom: 4px;
+    padding: 4px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-time-slot-holiday {
+    background-color: #ebf8ff;
+  }
+
+  .modal-time-slot-japanese {
+    background-color: #fffbeb;
+  }
+
+  .modal-time-slot-western {
+    background-color: #f0fff4;
+  }
+
+  .modal-time-slot-basic {
+    background-color: #fff5f5;
+  }
+
+  .modal-more-slots {
+    font-size: 10px;
+    color: #718096;
+    text-align: center;
+  }

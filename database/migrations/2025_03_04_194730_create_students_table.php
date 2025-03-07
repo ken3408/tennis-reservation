@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,7 +22,7 @@ class CreateStudentsTable extends Migration
             $table->integer('ticket_count')->default(0); // チケット数
             $table->date('ticket_expiry_date')->nullable(); // チケット有効期限 (NULL許可)
             $table->enum('status', ['退会', '休会', 'レギュラー', '仮会員'])->default('仮会員'); // ステータス
-            $table->unsignedBigInteger('role_id'); // 権限ID
+            $table->unsignedBigInteger('role_id'); // 権限ID　1: ジュニア、2: 一般
             $table->timestamps(); // created_at, updated_at
         });
     }

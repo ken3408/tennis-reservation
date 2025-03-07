@@ -1,18 +1,4 @@
 <!-- filepath: /Applications/MAMP/htdocs/tennis-reservation/resources/views/components/confirm-modal.blade.php -->
-{{-- <div id="confirm-modal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white rounded-lg shadow-lg w-1/3">
-        <div class="px-4 py-2 border-b">
-            <h2 class="text-lg font-semibold">{{ $title }}</h2>
-        </div>
-        <div class="p-4">
-            {{ $slot }}
-        </div>
-        <div class="px-4 py-2 border-t flex justify-end">
-            <button id="cancel-button" class="btn btn-outline">キャンセル</button>
-            <button class="btn btn-primary ml-2">確認</button>
-        </div>
-    </div>
-</div> --}}
 <div id="confirm-modal" class="reservation-modal" style="display: none;">
     <div class="reservation-modal__content">
       <div class="reservation-modal__header">

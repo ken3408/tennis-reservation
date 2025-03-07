@@ -1,14 +1,14 @@
 $(document).ready(function() {
     var modal = $('#confirm-modal');
-    var reserveButtons = $('.btn-primary.btn-full');
+    var reserveButtons = $('.js-reservation-button');
     var cancelButton = $('#cancel-button');
 
     reserveButtons.on('click', function() {
-        modal.show();
+        modal.fadeIn();
     });
 
     cancelButton.on('click', function() {
-        modal.hide();
+        modal.fadeOut();
     });
 
     $(window).on('click', function(event) {
