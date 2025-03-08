@@ -17,20 +17,15 @@ class LoginController extends Controller
     // ログイン処理
     public function login(Request $request)
     {
-        // バリデーション
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-        ]);
-
         // 認証試行
         if (Auth::guard('students')->attempt($request->only('email', 'password'), $request->filled('remember'))) {
-            return redirect()->route('dashboard'); // ログイン成功時にリダイレクト
+            return response()->json(['success' => true, 'redirect' => route('home')]); // ログイン成功時にリダイレクト
         }
 
-        return back()->withErrors([
-            'email' => 'メールアドレスまたはパスワードが正しくありません。',
-        ])->withInput($request->only('email', 'remember'));
+        return response()->json([
+            'success' => false,
+            'errors' => ['email' => 'メールアドレスまたはパスワードが正しくありません。']
+        ]);
     }
 
     // ログアウト処理

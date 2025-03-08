@@ -7,7 +7,7 @@ use App\Http\Controllers\MypageController;
 use App\Http\Controllers\Auth\LoginController;
 
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post'); // ログイン処理
 // ダッシュボード (ログイン必須)

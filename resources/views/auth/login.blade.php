@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>テニス予約アプリ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     {{-- home.cssを読み込ませる  --}}
@@ -156,6 +157,8 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content') // CSRF トークンを追加
                     },
                     body: JSON.stringify({
                         email,
@@ -166,8 +169,9 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        console.log('Login success');
                         // ログイン成功時の処理
-                        window.location.href = '/dashboard';
+                        window.location.href = '/';
                     } else {
                         // ログイン失敗時の処理
                         showErrorMessage();

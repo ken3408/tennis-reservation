@@ -20,6 +20,7 @@ class StudentsSeeder extends Seeder
                 'ticket_expiry_date' => now()->addMonths(3),
                 'status' => 2, // レギュラー
                 'role_id' => 1, // 一般
+                'password' => bcrypt('password123'), // パスワード
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -32,6 +33,7 @@ class StudentsSeeder extends Seeder
                 'ticket_expiry_date' => null,
                 'status' => 3, // 仮会員
                 'role_id' => 2, // ジュニア
+                'password' => bcrypt('password456'), // パスワード
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
