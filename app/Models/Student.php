@@ -2,44 +2,42 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Student extends Model
+class Student extends Authenticatable
 {
-    use HasFactory;
-
-    protected $table = 'students'; // テーブル名
-
     protected $fillable = [
         'name',
         'email',
+        'password',
         'line_id',
         'level',
         'ticket_count',
         'ticket_expiry_date',
         'status',
         'role_id'
-    ]; // 一括代入可能なカラム
-
-    protected $casts = [
-        'level' => 'integer',
-        'ticket_count' => 'integer',
-        'ticket_expiry_date' => 'date',
-        'role_id' => 'integer',
-        'status' => 'string',
     ];
 
-    /**
-     * 学生のロールを取得（リレーション）
-     */
-    public function role()
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    const STATUS = [
+        0 => '退会',
+        1 => '休会',
+        2 => 'レギュラー',
+        3 => '仮会員',
+    ];
+
+    public function getStatusLabel()
     {
-        return $this->belongsTo(StudentRole::class, 'role_id', 'role_id');
+        return self::STATUS[$this->status] ?? '不明';
     }
-    public function login(): MorphOne
+
+    // 生徒が参加しているレッスン
+    public function lessons()
     {
-        return $this->morphOne(Login::class, 'user');
+        return $this->belongsToMany(LessonSchedule::class, 'lesson_students', 'student_id', 'lesson_schedule_id');
     }
 }

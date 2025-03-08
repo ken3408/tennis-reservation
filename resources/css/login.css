@@ -1,0 +1,327 @@
+/* リセットとベーススタイル */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  body {
+    background-color: #f9fafb;
+    color: #333;
+    line-height: 1.5;
+  }
+
+  /* メインコンテナ */
+  .main {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  /* ログインコンテナ */
+  .login-container {
+    width: 100%;
+    max-width: 28rem;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  /* ログインタイトル */
+  .login-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to right, #1f2937, #4b5563);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: fadeIn 0.5s ease-out 0.2s both;
+  }
+
+  /* エラーメッセージエリア */
+  .error-message-area {
+    display: none;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .bg-danger {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border-left: 4px solid #ef4444;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ログインコンテンツ */
+  .login-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Googleログインボタン */
+  .google-button {
+    width: 100%;
+    height: 3.5rem;
+    font-size: 1rem;
+    font-weight: 400;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    animation: fadeInUp 0.5s ease-out 0.3s both;
+  }
+
+  .google-button:hover {
+    background-color: #f9fafb;
+  }
+
+  .google-button-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .google-icon {
+    margin-right: 0.75rem;
+  }
+
+  .google-text {
+    font-weight: 500;
+  }
+
+  /* 区切り線 */
+  .divider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
+    animation: fadeIn 0.5s ease-out 0.4s both;
+  }
+
+  .divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #e5e7eb;
+  }
+
+  .divider-text {
+    position: relative;
+    padding: 0 1rem;
+    background-color: white;
+    color: #9ca3af;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  /* メールログインテキスト */
+  .email-login-text {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #4b5563;
+    font-weight: 500;
+    animation: fadeIn 0.5s ease-out 0.5s both;
+  }
+
+  /* ログインフォーム */
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    animation: fadeInUp 0.5s ease-out 0.6s both;
+  }
+
+  /* フォームグループ */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* フォームラベル */
+  .form-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-left: 0.25rem;
+  }
+
+  /* パスワードヘッダー */
+  .password-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* パスワードを忘れた場合リンク */
+  .forgot-password {
+    font-size: 0.875rem;
+    color: #2563eb;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .forgot-password:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+  }
+
+  /* フォーム入力 */
+  .form-input {
+    height: 3.5rem;
+    padding: 0 1rem;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    transition: all 0.3s;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  /* 自動ログインチェックボックス */
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 0.25rem;
+  }
+
+  .checkbox {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid #d1d5db;
+    accent-color: #3b82f6;
+  }
+
+  .checkbox-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4b5563;
+  }
+
+  /* ログインボタン */
+  .login-button {
+    width: 100%;
+    height: 3.5rem;
+    margin-top: 0.5rem;
+    background-color: #6CCBB0;
+    color: white;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .login-button:hover {
+    background-color: #5bb9a0;
+  }
+
+  /* 新規登録リンク */
+  .signup-link {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 1.5rem;
+  }
+
+  .signup-text {
+    color: #2563eb;
+    font-weight: 500;
+    margin-left: 0.25rem;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .signup-text:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+  }
+
+  /* スクロールトップボタン */
+  .scroll-top-button {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 9999px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: none;
+  }
+
+  .scroll-top-button:hover {
+    background-color: #f9fafb;
+  }
+
+  .chevron-up {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+
+  /* アニメーション */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* レスポンシブデザイン */
+  @media (max-width: 640px) {
+    .login-container {
+      padding: 1.5rem;
+    }
+
+    .password-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }

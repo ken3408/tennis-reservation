@@ -21,8 +21,9 @@ class CreateStudentsTable extends Migration
             $table->integer('level')->default(1); // レベル (デフォルト値を1に設定)
             $table->integer('ticket_count')->default(0); // チケット数
             $table->date('ticket_expiry_date')->nullable(); // チケット有効期限 (NULL許可)
-            $table->enum('status', ['退会', '休会', 'レギュラー', '仮会員'])->default('仮会員'); // ステータス
-            $table->unsignedBigInteger('role_id'); // 権限ID　1: ジュニア、2: 一般
+            $table->tinyInteger('status')->default(3)->comment('0: 退会, 1: 休会, 2: レギュラー, 3: 仮会員'); // ステータス
+            $table->unsignedBigInteger('role_id')->comment('1: 一般, 2: ジュニア'); // 権限ID
+            $table->string('password'); // パスワード
             $table->timestamps(); // created_at, updated_at
         });
     }
