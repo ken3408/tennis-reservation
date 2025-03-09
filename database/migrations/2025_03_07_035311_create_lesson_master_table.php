@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('name', 50)->comment('レッスン名');
             $table->tinyInteger('level')->comment('レッスンレベル (1～9)');
             $table->tinyInteger('category')->comment('1: 一般, 2: ジュニア');
+            $table->tinyInteger('max_participants')->comment('最大人数');
             $table->timestamps();
         });
     }

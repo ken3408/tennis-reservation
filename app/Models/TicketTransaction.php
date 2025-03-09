@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\StudentTicket; // 追加
 
 class TicketTransaction extends Model
 {
@@ -12,22 +13,19 @@ class TicketTransaction extends Model
     protected $table = 'ticket_transactions';
 
     protected $fillable = [
-        'student_id',
-        'lesson_id',
+        'student_ticket_id',
+        'lesson_student_record_id',
         'transaction_type',
-        'ticket_count',
-        'created_at',
+        'ticket_change',
     ];
 
-    // 生徒との関係
-    public function student()
+    public function studentTicket()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(StudentTicket::class);
     }
 
-    // レッスンとの関係
-    public function lesson()
+    public function lessonStudentRecord()
     {
-        return $this->belongsTo(LessonMaster::class, 'lesson_id');
+        return $this->belongsTo(LessonStudentRecord::class);
     }
 }
