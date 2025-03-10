@@ -831,6 +831,61 @@
                 </table>
             </div>
         </div>
+        <!-- モーダル -->
+        <div class="modal-overlay" id="editModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">スケジュール編集</h3>
+                    <button class="close-btn" id="closeModalBtn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-label">年月</div>
+                        <div>2025年3月</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">曜日</div>
+                        <div id="dayValue"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">時間</div>
+                        <div id="timeValue"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">コート番号</div>
+                        <div id="courtValue"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="classSelect">クラス</label>
+                        <div>
+                            <select class="form-control" id="classSelect">
+                                @foreach ($lessonMasters as $lesson)
+                                    <option value="{{ $lesson->name }}">{{ $lesson->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="coachGroup">
+                        <label class="form-label" for="coachSelect">担当コーチ</label>
+                        <div>
+                            <select class="form-control" id="coachSelect">
+                                <option value="">選択してください</option>
+                                @foreach ($staffs as $staff)
+                                    <option value="{{ $staff->name }}">{{ $staff->name }}</option>
+                                @endforeach
+                            </select>
+                            <div class="helper-text" id="coachHelperText" style="display: none;">
+                                レッスンなしの場合、コーチは選択できません
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" id="cancelBtn">キャンセル</button>
+                    <button class="btn btn-primary" id="saveBtn">保存</button>
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 

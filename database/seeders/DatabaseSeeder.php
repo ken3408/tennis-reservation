@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
             LessonMasterSeeder::class,
             // StudentsSeeder::class,
             LessonTimeSlotsSeeder::class,
-            StaffRoleSeeder::class,
+            StudentsSeeder::class,
+            StaffRolesSeeder::class,
+            StaffSeeder::class,
         ]);
     }
 }

@@ -14,7 +14,7 @@ class CreateStaffRolesTable extends Migration
     public function up()
     {
         Schema::create('staff_roles', function (Blueprint $table) {
-            $table->id('role_id'); // ロールID (主キー)
+            $table->id(); // 生徒ID (自動増分主キー)
             $table->string('role_name')->comment('ロール名: 管理者、コーチ、フロントスタッフ'); // ロール名
             $table->integer('permission_level')->comment('権限レベル'); // 権限レベル
             $table->timestamps(); // created_at, updated_at

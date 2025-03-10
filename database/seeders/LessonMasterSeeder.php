@@ -14,7 +14,7 @@ class LessonMasterSeeder extends Seeder
                 'name' => '初心',
                 'level' => 1,
                 'category' => 1, // 一般
-                'max_participants' => 10,
+                'max_participants' => 8,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -22,7 +22,7 @@ class LessonMasterSeeder extends Seeder
                 'name' => '初級',
                 'level' => 2,
                 'category' => 1, // 一般
-                'max_participants' => 10,
+                'max_participants' => 8,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -30,7 +30,7 @@ class LessonMasterSeeder extends Seeder
                 'name' => '初中級',
                 'level' => 3,
                 'category' => 1, // 一般
-                'max_participants' => 10,
+                'max_participants' => 8,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -38,7 +38,7 @@ class LessonMasterSeeder extends Seeder
                 'name' => '中級',
                 'level' => 4,
                 'category' => 1, // 一般
-                'max_participants' => 10,
+                'max_participants' => 8,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -46,23 +46,31 @@ class LessonMasterSeeder extends Seeder
                 'name' => '上級',
                 'level' => 5,
                 'category' => 1, // 一般
-                'max_participants' => 10,
+                'max_participants' => 8,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'ジュニア初級',
+                'name' => 'シングル',
+                'level' => 6,
+                'category' => 1, // 一般
+                'max_participants' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Jr1',
                 'level' => 1,
                 'category' => 2, // ジュニア
-                'max_participants' => 12,
+                'max_participants' => 8,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'ジュニア上級',
+                'name' => 'Jr2',
                 'level' => 8,
                 'category' => 2, // ジュニア
-                'max_participants' => 12,
+                'max_participants' => 8,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

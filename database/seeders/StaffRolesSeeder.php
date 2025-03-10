@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class StaffRoleSeeder extends Seeder
+class StaffRolesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,23 +16,27 @@ class StaffRoleSeeder extends Seeder
     {
         DB::table('staff_roles')->insert([
             [
+                'id' => 1,
                 'role_name' => '管理者',
+                'permission_level' => 10,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 2,
+                'role_name' => 'コーチ',
+                'permission_level' => 5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 3,
+                'role_name' => 'フロントスタッフ',
                 'permission_level' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'role_name' => 'コーチ',
-                'permission_level' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'role_name' => 'フロントスタッフ',
-                'permission_level' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // 他のロールデータを追加できます
         ]);
     }
 }
