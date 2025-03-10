@@ -15,15 +15,10 @@ class LessonSchedule extends Model
         'lesson_master_id',
         'year_month',
         'weekday',
-        'start_time',
-        'end_time',
-        'court_id',
+        'court_num',
         'staff_id',
         'sub_staff_id',
-        'max_participants',
-        'current_participants',
-        'status',
-        'lesson_court_status_id', // レッスンコートステータスIDを追加
+        'lesson_time_slot_id',
     ];
 
     // スケジュールはレッスンマスターに属する
@@ -38,14 +33,17 @@ class LessonSchedule extends Model
         return $this->belongsToMany(Student::class, 'lesson_students', 'lesson_schedule_id', 'student_id');
     }
 
-    // メインコーチ
-    public function staff()
+    public function lessonTimeSlot()
+    {
+        return $this->belongsTo(LessonTimeSlot::class);
+    }
+
+    public function mainCoach()
     {
         return $this->belongsTo(Staff::class, 'staff_id');
     }
 
-    // サブコーチ
-    public function subStaff()
+    public function subCoach()
     {
         return $this->belongsTo(Staff::class, 'sub_staff_id');
     }

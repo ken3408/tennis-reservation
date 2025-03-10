@@ -34,6 +34,11 @@ $(document).ready(function() {
         const timeRange = timeCell.find('.text-xs').text().trim();
         const court = $(this).closest('tr').find('td:nth-child(2)').text().trim();
 
+        // // 年と月の情報を取得して設定
+        // const year = $('#shift-year').text();
+        // const month = $('#shift-month').text();
+        // $('#yearMonth').text(`${year}年${month}月`);
+
         // 曜日を取得（列のインデックスから計算）
         const dayIndex = $(this).index() - 1; // 最初の2列（時間とコート）を除く
         const days = ['月', '火', '水', '木', '金'];
@@ -85,12 +90,26 @@ $(document).ready(function() {
         $('#editModal').hide();
     });
 
+    // route関数の定義
+    function route(name) {
+        const routes = {
+            'admin.schedule.store': '/admin/schedule/store'
+        };
+        return routes[name];
+    }
+
     // 保存ボタンの処理
     $('#saveBtn').on('click', function() {
         if (!currentCell) return;
 
         const selectedClass = $('#classSelect').val();
         const selectedCoach = $('#coachSelect').val();
+        const year = $('#shift-year').text();
+        const month = $('#shift-month').text().padStart(2, '0'); // 月を2桁にする
+        const yearMonth = year + month;
+        const week_day = $('#dayValue').text();
+        const time = $('#timeValue').text();
+        const court = $('#courtValue').text();
 
         // セルの内容を更新
         if (selectedClass === 'レッスンなし') {
@@ -108,6 +127,37 @@ $(document).ready(function() {
 
         // モーダルを閉じる
         $('#editModal').hide();
+
+        // データをバックエンドに送信
+        const data = {
+            yearMonth,
+            week_day,
+            time,
+            court,
+            class: selectedClass,
+            coach: selectedCoach
+        };
+
+        fetch(`${route('admin.schedule.store')}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     });
 
     // モーダル外をクリックしたときに閉じる
