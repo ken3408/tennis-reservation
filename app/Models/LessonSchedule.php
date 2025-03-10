@@ -23,6 +23,7 @@ class LessonSchedule extends Model
         'max_participants',
         'current_participants',
         'status',
+        'lesson_court_status_id', // レッスンコートステータスIDを追加
     ];
 
     // スケジュールはレッスンマスターに属する

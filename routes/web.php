@@ -19,3 +19,4 @@ Route::middleware('auth')->group(function () {
   Route::get('/mypage', [MypageController::class, 'index'])->name('mypage');
 });
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index'); // 管理画面のルートを追加
+Route::post('/admin/schedule/store', [AdminController::class, 'storeSchedule'])->name('admin.schedule.store'); // 追加

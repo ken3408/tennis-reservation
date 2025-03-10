@@ -16,14 +16,14 @@
 <body>
     <header>
         <div class="container">
-            <h1><i class="calendar-icon"></i> コーチ時間割管理システム</h1>
+            <h1><i class="calendar-icon"></i> シフト管理</h1>
             <div class="user-info">管理者: 管理太郎</div>
         </div>
     </header>
 
     <main class="container">
         <div class="tab-content" id="timetable">
-            <h2>時間割表　<span>2025</span>年<span>3</span>月</h2>
+            <h2>シフト表　<span>2025</span>年<span>3</span>月</h2>
 
             <div class="day-toggle">
                 <button class="day-btn active" data-day="weekday">平日</button>
@@ -839,50 +839,55 @@
                     <button class="close-btn" id="closeModalBtn">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <div class="form-label">年月</div>
-                        <div>2025年3月</div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-label">曜日</div>
-                        <div id="dayValue"></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-label">時間</div>
-                        <div id="timeValue"></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-label">コート番号</div>
-                        <div id="courtValue"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="classSelect">クラス</label>
-                        <div>
-                            <select class="form-control" id="classSelect">
-                                @foreach ($lessonMasters as $lesson)
-                                    <option value="{{ $lesson->name }}">{{ $lesson->name }}</option>
-                                @endforeach
-                            </select>
+                    <form id="scheduleForm" method="POST" action="{{ route('admin.schedule.store') }}">
+                        @csrf
+                        <div class="form-group">
+                            <div class="form-label">年月</div>
+                            <div>2025年3月</div>
                         </div>
-                    </div>
-                    <div class="form-group" id="coachGroup">
-                        <label class="form-label" for="coachSelect">担当コーチ</label>
-                        <div>
-                            <select class="form-control" id="coachSelect">
-                                <option value="">選択してください</option>
-                                @foreach ($staffs as $staff)
-                                    <option value="{{ $staff->name }}">{{ $staff->name }}</option>
-                                @endforeach
-                            </select>
-                            <div class="helper-text" id="coachHelperText" style="display: none;">
-                                レッスンなしの場合、コーチは選択できません
+                        <div class="form-group">
+                            <div class="form-label">曜日</div>
+                            <div id="dayValue"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-label">時間</div>
+                            <div id="timeValue"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-label">コート番号</div>
+                            <div id="courtValue"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="classSelect">クラス</label>
+                            <div>
+                                <select class="form-control" id="classSelect" name="lesson_master_id">
+                                    @foreach ($lessonMasters as $lesson)
+                                        <option value="{{ $lesson->id }}">{{ $lesson->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                    </div>
+                        <div class="form-group" id="coachGroup">
+                            <label class="form-label" for="coachSelect">担当コーチ</label>
+                            <div>
+                                <select class="form-control" id="coachSelect" name="staff_id">
+                                    <option value="">選択してください</option>
+                                    @foreach ($staffs as $staff)
+                                        <option value="{{ $staff->id }}">
+                                            {{ $staff->last_name }} {{ $staff->first_name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="helper-text" id="coachHelperText" style="display: none;">
+                                    レッスンなしの場合、コーチは選択できません
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline" id="cancelBtn">キャンセル</button>
-                    <button class="btn btn-primary" id="saveBtn">保存</button>
+                    <button class="btn btn-primary" id="saveBtn"
+                        onclick="document.getElementById('scheduleForm').submit();">保存</button>
                 </div>
             </div>
         </div>

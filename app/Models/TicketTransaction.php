@@ -17,6 +17,7 @@ class TicketTransaction extends Model
         'lesson_student_record_id',
         'transaction_type',
         'ticket_change',
+        'transaction_date', // トランザクション日付を追加
     ];
 
     public function studentTicket()

@@ -12,9 +12,12 @@ class Staff extends Model
     protected $table = 'staff';
 
     protected $fillable = [
-        'name',
         'email',
-        'phone',
+        'last_name',
+        'first_name',
+        'user_number', // user_numberを追加
+        'password', // passwordを追加
+        'role_id', // role_idを追加
     ];
 
     // メインコーチとして担当するレッスン
@@ -27,5 +30,10 @@ class Staff extends Model
     public function subLessons()
     {
         return $this->hasMany(LessonSchedule::class, 'sub_staff_id');
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(StaffRole::class, 'role_id');
     }
 }

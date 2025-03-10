@@ -20,7 +20,6 @@ class CreateStaffTable extends Migration
             $table->string('user_number')->unique()->comment('ユーザー番号'); // ユーザー番号
             $table->string('email')->unique()->comment('メールアドレス'); // メールアドレス
             $table->string('password')->comment('パスワード'); // パスワード
-            $table->boolean('is_admin')->default(false)->comment('管理者フラグ'); // 管理者フラグ
             $table->unsignedBigInteger('role_id')->comment('ロールID'); // ロールID
             $table->timestamps(); // created_at, updated_at
 

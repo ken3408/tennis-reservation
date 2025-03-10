@@ -20,13 +20,11 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('lesson_master_id')->constrained('lesson_master')->onDelete('cascade');
             $table->char('year_month', 6)->comment('年月 (YYYYMM)');
-            $table->enum('weekday', ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'])->comment('曜日');
+            $table->enum('weekday', ['日', '月', '火', '水', '木', '金', '土'])->comment('曜日');
             $table->integer('court_num')->comment('コート番号');
             $table->foreignId('staff_id')->constrained('staff')->onDelete('cascade')->comment('メインコーチ');
             $table->foreignId('sub_staff_id')->nullable()->constrained('staff')->onDelete('set null')->comment('サブコーチ');
             $table->foreignId('lesson_time_slot_id')->constrained('lesson_time_slots')->onDelete('cascade')->comment('時間スロットID');
-            $table->tinyInteger('current_participants')->default(0)->comment('現在の予約人数');
-            $table->enum('status', ['OPEN', 'CLOSED', 'CANCELLED'])->comment('レッスンの状態');
             $table->timestamps();
         });
     }
