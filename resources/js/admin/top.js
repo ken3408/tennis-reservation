@@ -47,6 +47,8 @@ $(document).ready(function() {
         // クラスとコーチの情報を取得
         const classValue = $(this).find('.class').text().trim();
         const coachValue = $(this).find('.coach').text().trim();
+        const lessonId = $(this).data('lesson-id');
+        const coachId = $(this).data('coach-id');
 
         // モーダルに値をセット
         $('#dayValue').text(day);
@@ -59,9 +61,9 @@ $(document).ready(function() {
             $('#coachSelect').prop('disabled', true);
             $('#coachHelperText').show();
         } else {
-            $('#classSelect').val(classValue === '担当クラス' ? '初級' : classValue);
+            $('#classSelect').val(lessonId);
             $('#coachSelect').prop('disabled', false);
-            $('#coachSelect').val(coachValue);
+            $('#coachSelect').val(coachId);
             $('#coachHelperText').hide();
         }
 
@@ -102,8 +104,10 @@ $(document).ready(function() {
     $('#saveBtn').on('click', function() {
         if (!currentCell) return;
 
-        const selectedClass = $('#classSelect').val();
-        const selectedCoach = $('#coachSelect').val();
+        const selectedClass = $('#classSelect option:selected').text();
+        const selectedClassId = $('#classSelect').val();
+        const selectedCoach = $('#coachSelect option:selected').text();
+        const selectedCoachId = $('#coachSelect').val();
         const year = $('#shift-year').text();
         const month = $('#shift-month').text().padStart(2, '0'); // 月を2桁にする
         const yearMonth = year + month;
@@ -134,8 +138,8 @@ $(document).ready(function() {
             week_day,
             time,
             court,
-            class: selectedClass,
-            coach: selectedCoach
+            class_id: selectedClassId,
+            coach_id: selectedCoachId
         };
 
         fetch(`${route('admin.schedule.store')}`, {

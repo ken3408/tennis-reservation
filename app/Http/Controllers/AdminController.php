@@ -19,56 +19,145 @@ class AdminController extends Controller
         $staffs = Staff::all(); // 追加
         $lessonTimeSlot = LessonTimeSlot::all(); // 追加
         $scheduleData = [
-          "A" => [
-              "1" => [ //コート番号
-                  "1" => ["class" => "初級", "coach" => "山田 太郎"], // 月
-                  "2" => ["class" => "初心", "coach" => "山口"], // 火
-                  "3" => ["class" => "中級", "coach" => "佐藤 花子"], // 水
-                  "4" => ["class" => "シングル", "coach" => "高田"], // 木
-                  "5" => ["class" => "初中級", "coach" => "鈴木 一郎"], // 金
-              ],
-              "2" => [
-                  "1" => ["class" => "担当クラス", "coach" => "佐藤 花子"],
-                  "2" => ["class" => "担当クラス", "coach" => ""],
-                  "3" => ["class" => "担当クラス", "coach" => ""],
-                  "4" => ["class" => "担当クラス", "coach" => ""],
-                  "5" => ["class" => "担当クラス", "coach" => ""],
-              ],
-              "3" => [
-                "1" => ["class" => "担当クラス", "coach" => "鈴木 一郎"],
-                "2" => ["class" => "担当クラス", "coach" => ""],
-                "3" => ["class" => "担当クラス", "coach" => ""],
-                "4" => ["class" => "担当クラス", "coach" => ""],
-                "5" => ["class" => "担当クラス", "coach" => ""],
+            "A 10:30〜12:00" => [
+                "1" => [ //コート番号
+                    "1" => [
+                        ["lesson_id" => 2, "class" => "初級"],
+                        ["coach_id" => 1, "coach" => "山田 太郎"]
+                    ], // 月
+                    "2" => [
+                        ["lesson_id" => 1, "class" => "初心"],
+                        ["coach_id" => 2, "coach" => "山口"]
+                    ], // 火
+                    "3" => [
+                        ["lesson_id" => 4, "class" => "中級"],
+                        ["coach_id" => 3, "coach" => "佐藤 花子"]
+                    ], // 水
+                    "4" => [
+                        ["lesson_id" => 6, "class" => "シングル"],
+                        ["coach_id" => 4, "coach" => "高田"]
+                    ], // 木
+                    "5" => [
+                        ["lesson_id" => 3, "class" => "初中級"],
+                        ["coach_id" => 5, "coach" => "鈴木 一郎"]
+                    ], // 金
+                ],
+                "2" => [
+                    "1" => [
+                        ["lesson_id" => 4, "class" => "担当クラス"],
+                        ["coach_id" => 3, "coach" => "佐藤 花子"]
+                    ],
+                    "2" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "3" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "4" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "5" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                ],
+                "3" => [
+                    "1" => [
+                        ["lesson_id" => 4, "class" => "担当クラス"],
+                        ["coach_id" => 3, "coach" => "鈴木 一郎"]
+                    ],
+                    "2" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "3" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "4" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "5" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                ],
+                "4" => [
+                    "1" => [
+                        ["lesson_id" => 4, "class" => "担当クラス"],
+                        ["coach_id" => 3, "coach" => "高橋 美咲"]
+                    ],
+                    "2" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "3" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "4" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "5" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                ]
             ],
-            "4" => [
-                "1" => ["class" => "担当クラス", "coach" => "高橋 美咲"],
-                "2" => ["class" => "担当クラス", "coach" => ""],
-                "3" => ["class" => "担当クラス", "coach" => ""],
-                "4" => ["class" => "担当クラス", "coach" => ""],
-                "5" => ["class" => "担当クラス", "coach" => ""],
+            "B 12:30〜14:00" => [
+                "1" => [ //コート番号
+                    "1" => [
+                        ["lesson_id" => 2, "class" => "初級"],
+                        ["coach_id" => 1, "coach" => "山田 太郎"]
+                    ], // 月
+                    "2" => [
+                        ["lesson_id" => 1, "class" => "初心"],
+                        ["coach_id" => 2, "coach" => "山口"]
+                    ], // 火
+                    "3" => [
+                        ["lesson_id" => 4, "class" => "中級"],
+                        ["coach_id" => 3, "coach" => "佐藤 花子"]
+                    ], // 水
+                    "4" => [
+                        ["lesson_id" => 6, "class" => "シングル"],
+                        ["coach_id" => 4, "coach" => "高田"]
+                    ], // 木
+                    "5" => [
+                        ["lesson_id" => 3, "class" => "初中級"],
+                        ["coach_id" => 5, "coach" => "鈴木 一郎"]
+                    ], // 金
+                ],
+                "2" => [
+                    "1" => [
+                        ["lesson_id" => 6, "class" => "担当クラス"],
+                        ["coach_id" => 6, "coach" => "高橋 美咲"]
+                    ],
+                    "2" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "3" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "4" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                    "5" => [
+                        ["lesson_id" => null, "class" => "担当クラス"],
+                        ["coach_id" => null, "coach" => ""]
+                    ],
+                ]
             ]
-          ],
-          "B" => [
-              "1" => [
-                  "1" => ["class" => "担当クラス", "coach" => "鈴木 一郎"],
-                  "2" => ["class" => "担当クラス", "coach" => ""],
-                  "3" => ["class" => "担当クラス", "coach" => ""],
-                  "4" => ["class" => "担当クラス", "coach" => ""],
-                  "5" => ["class" => "担当クラス", "coach" => ""],
-              ],
-              "2" => [
-                  "1" => ["class" => "担当クラス", "coach" => "高橋 美咲"],
-                  "2" => ["class" => "担当クラス", "coach" => ""],
-                  "3" => ["class" => "担当クラス", "coach" => ""],
-                  "4" => ["class" => "担当クラス", "coach" => ""],
-                  "5" => ["class" => "担当クラス", "coach" => ""],
-              ]
-          ]
-      ];
+        ];
 
-
-        return view('admin.index', compact('year', 'month', 'lessonMasters', 'staffs', 'lessonTimeSlot', 'scheduleData')); // 変更
+        return view('admin.index', compact('year', 'month', 'lessonMasters', 'staffs', 'lessonTimeSlot', 'scheduleData'));
     }
 
     public function storeSchedule(Request $request)
