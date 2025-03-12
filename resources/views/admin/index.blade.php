@@ -47,19 +47,23 @@
             </tr>
           </thead>
           <tbody>
-            @foreach ($scheduleData as $courtName => $times)
-              @foreach ($times as $timeSlot => $schedule)
+            @foreach ($scheduleData as $lessonTime => $times)
+              @foreach ($times as $courtNum => $schedule)
                 <tr>
                   @if ($loop->first)
                     <td rowspan="{{ count($times) }}" class="time-cell">
-                      {{ explode(' ', $courtName)[0] }}
-                      <div class="text-xs text-muted-foreground">{{ explode(' ', $courtName)[1] }}</div>
+                      {{ explode(' ', $lessonTime)[0] }}
+                      <div class="text-xs text-muted-foreground">{{ explode(' ', $lessonTime)[1] }}</div>
                     </td>
                   @endif
-                  <td class="time-slot">{{ $timeSlot }}</td>
+                  <td class="court-num">{{ $courtNum }}</td>
                   @foreach (range(1, 5) as $day)
-                    <td data-lesson-id="{{ $schedule[$day][0]['lesson_id'] ?? '' }}"
-                      data-coach-id="{{ $schedule[$day][1]['coach_id'] ?? '' }}">
+                    <td data-weekday-index="{{ $day }}"
+                      data-lesson-id="{{ $schedule[$day][0]['lesson_id'] ?? '' }}"
+                      data-coach-id="{{ $schedule[$day][1]['coach_id'] ?? '' }}"
+                      data-lesson_time_slot_id="{{ $schedule[$day][2]['lesson_time_slot_id'] ?? '' }}"
+                      data-lesson-time="{{ $schedule[$day][2]['class_name'] ?? '' }}"
+                      data-time-range="{{ $schedule[$day][2]['start_time'] ?? '' }}〜{{ $schedule[$day][2]['end_time'] ?? '' }}">
                       @foreach ($schedule[$day] as $info)
                         @if (isset($info['class']))
                           <div class="class">{{ $info['class'] }}</div>

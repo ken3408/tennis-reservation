@@ -21,7 +21,6 @@ class LoginController extends Controller
         if (Auth::guard('students')->attempt($request->only('email', 'password'), $request->filled('remember'))) {
             return response()->json(['success' => true, 'redirect' => route('home')]); // ログイン成功時にリダイレクト
         }
-
         return response()->json([
             'success' => false,
             'errors' => ['email' => 'メールアドレスまたはパスワードが正しくありません。']
