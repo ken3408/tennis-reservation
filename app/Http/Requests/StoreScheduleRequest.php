@@ -16,7 +16,8 @@ class StoreScheduleRequest extends FormRequest
         return [
             'lesson_master_id' => 'required',
             'staff_id' => 'nullable',
-            'lesson_time_slot_id' => 'required',
+            'lesson_time_slot_name' => 'required',
+            'lesson_time_slot_weekday_type' => 'required',
             'year_month' => 'required|date_format:Ym',
             'weekday' => 'required|string',
             'court_num' => 'required|integer',

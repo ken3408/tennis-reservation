@@ -23,15 +23,14 @@ class AdminController extends Controller
         $lessonScadules = LessonSchedule::where('year_month', $year . sprintf('%02d', $month))->get(); // 追加
         $scheduleData = ScheduleService::generateScheduleData($lessonScadules); // 変更
         // dd($scheduleData); // 追加
-        $scheduleData = $this->getScheduleData(); // 追加
-
+        // $scheduleData = $this->getScheduleData(); // 追加
         return view('admin.index', compact('year', 'month', 'lessonMasters', 'staffs', 'lessonTimeSlot', 'scheduleData'));
     }
 
     public function storeSchedule(StoreScheduleRequest $request)
     {
         $validatedData = $request->validated();
-
+        $validatedData['lesson_time_slot_id'] = LessonTimeSlot::where('class_name', $validatedData['lesson_time_slot_name'])->first()->id;
         LessonSchedule::create($validatedData);
 
 
@@ -42,34 +41,34 @@ class AdminController extends Controller
       $scheduleData = [
         "A 10:30〜12:00" => [
             "1" => [ //コート番号
-                "月" => [
+                "1" => [
                     ["lesson_id" => 2, "class" => "初級"],
                     ["coach_id" => 1, "coach" => "山田 太郎"],
                     ["lesson_time_slot_id" => 1, "class_name" => "A", "start_time" => "10:30", "end_time" => "12:00"],
                 ], // 月
-                "火" => [
+                "2" => [
                     ["lesson_id" => 1, "class" => "初心"],
                     ["coach_id" => 2, "coach" => "山口"],
                     ["lesson_time_slot_id" => 1, "class_name" => "A", "start_time" => "10:30", "end_time" => "12:00"],
                 ], // 火
-                "水" => [
+                "3" => [
                     ["lesson_id" => 4, "class" => "中級"],
                     ["coach_id" => 3, "coach" => "佐藤 花子"],
                     ["lesson_time_slot_id" => 1, "class_name" => "A", "start_time" => "10:30", "end_time" => "12:00"],
                 ], // 水
-                "木" => [
+                "4" => [
                     ["lesson_id" => 6, "class" => "シングル"],
                     ["coach_id" => 4, "coach" => "高田"],
                     ["lesson_time_slot_id" => 1, "class_name" => "A", "start_time" => "10:30", "end_time" => "12:00"],
                 ], // 木
-                "金" => [
+                "5" => [
                     ["lesson_id" => 3, "class" => "初中級"],
                     ["coach_id" => 5, "coach" => "鈴木 一郎"],
                     ["lesson_time_slot_id" => 1, "class_name" => "A", "start_time" => "10:30", "end_time" => "12:00"],
                 ], // 金
             ],
             "2" => [
-                "月" => [
+                "1" => [
                     ["lesson_id" => 4, "class" => "担当クラス"],
                     ["coach_id" => 3, "coach" => "佐藤 花子"],
                     ["lesson_time_slot_id" => 1, "class_name" => "A", "start_time" => "10:30", "end_time" => "12:00"],
@@ -701,7 +700,6 @@ class AdminController extends Controller
             ]
         ]
     ];
-
         return $scheduleData;
     }
 }

@@ -105,7 +105,10 @@ $(document).ready(function () {
     const month = $("#shift-month").text().padStart(2, "0"); // 月を2桁にする
     const yearMonth = year + month;
     const weekDay = $("#dayValue").text();
-    const timeSlotId = currentCell.data("lesson_time_slot_id");
+    const timeSlotName = currentCell.data("lesson_time_slot_class_name");
+    const timeSlotWeekdayType = currentCell.data(
+      "lesson_time_slot_weekday_type"
+    );
     const court = $("#courtValue").text();
 
     // セルの内容を更新
@@ -132,7 +135,8 @@ $(document).ready(function () {
       weekday: weekDay,
       court_num: court,
       staff_id: selectedCoachId,
-      lesson_time_slot_id: timeSlotId,
+      lesson_time_slot_name: timeSlotName,
+      lesson_time_slot_weekday_type: timeSlotWeekdayType,
     };
 
     fetch(`${route("admin.schedule.store")}`, {

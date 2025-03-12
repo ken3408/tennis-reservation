@@ -31,7 +31,6 @@
         <button class="day-btn active" data-day="weekday">平日</button>
         <button class="day-btn" data-day="weekend">土日</button>
       </div>
-
       <div class="timetable-container weekday active">
         <!-- 平日の時間割表 -->
         <table class="timetable">
@@ -52,27 +51,34 @@
                 <tr>
                   @if ($loop->first)
                     <td rowspan="{{ count($times) }}" class="time-cell">
+                      <!-- A -->
                       {{ explode(' ', $lessonTime)[0] }}
+                      <!-- 10:30〜12:00 -->
                       <div class="text-xs text-muted-foreground">{{ explode(' ', $lessonTime)[1] }}</div>
                     </td>
                   @endif
                   <td class="court-num">{{ $courtNum }}</td>
+                  <!-- 月曜日から金曜日 -->
                   @foreach (range(1, 5) as $day)
-                    <!-- 月曜日から金曜日 -->
                     <td data-weekday-index="{{ $day }}"
                       data-lesson-id="{{ $schedule[$day][0]['lesson_id'] ?? '' }}"
                       data-coach-id="{{ $schedule[$day][1]['coach_id'] ?? '' }}"
-                      data-lesson_time_slot_id="{{ $schedule[$day][2]['lesson_time_slot_id'] ?? '' }}"
-                      data-lesson-time="{{ $schedule[$day][2]['class_name'] ?? '' }}"
-                      data-time-range="{{ $schedule[$day][2]['start_time'] ?? '' }}〜{{ $schedule[$day][2]['end_time'] ?? '' }}">
-                      @foreach ($schedule[$day] as $info)
-                        @if (isset($info['class']))
-                          <div class="class">{{ $info['class'] }}</div>
-                        @endif
-                        @if (isset($info['coach']))
-                          <div class="coach">{{ $info['coach'] }}</div>
-                        @endif
-                      @endforeach
+                      data-lesson_time_slot_class_name="{{ explode(' ', $lessonTime)[0] }}"
+                      data-lesson_time_slot_weekday_type="WEEKDAY"
+                      data-lesson-time="{{ explode(' ', $lessonTime)[0] }}"
+                      data-time-range="{{ explode(' ', $lessonTime)[1] }}">
+                      @if (isset($schedule[$day]))
+                        @foreach ($schedule[$day] as $info)
+                          @if (isset($info['class']))
+                            {{-- レッスン名 --}}
+                            <div class="class">{{ $info['class'] }}</div>
+                          @endif
+                          @if (isset($info['coach']))
+                            {{-- コーチ名 --}}
+                            <div class="coach">{{ $info['coach'] }}</div>
+                          @endif
+                        @endforeach
+                      @endif
                     </td>
                   @endforeach
                 </tr>
