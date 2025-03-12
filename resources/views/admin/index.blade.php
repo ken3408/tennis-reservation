@@ -67,7 +67,7 @@
                       data-lesson_time_slot_weekday_type="WEEKDAY"
                       data-lesson-time="{{ explode(' ', $lessonTime)[0] }}"
                       data-time-range="{{ explode(' ', $lessonTime)[1] }}">
-                      @if (isset($schedule[$day]))
+                      @if (!empty($schedule[$day]))
                         @foreach ($schedule[$day] as $info)
                           @if (isset($info['class']))
                             {{-- レッスン名 --}}
@@ -78,6 +78,8 @@
                             <div class="coach">{{ $info['coach'] }}</div>
                           @endif
                         @endforeach
+                      @else
+                        <div class="class">レッスンなし</div>
                       @endif
                     </td>
                   @endforeach

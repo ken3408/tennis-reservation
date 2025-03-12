@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\LessonSchedule;
 use Carbon\Carbon;
+use App\Repositories\LessonScheduleRepository; // 追加
 
 class ScheduleService
 {

@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LessonMaster; // 追加
 use App\Models\Staff; // 追加
-use App\Models\LessonSchedule; // 追加
 use App\Models\LessonTimeSlot; // 追加
+use App\Models\LessonSchedule; // 追加
 use App\Http\Requests\StoreScheduleRequest; // 追加
 use App\Services\ScheduleService; // 追加
+use App\Repositories\LessonScheduleRepository; // 追加
 
 class AdminController extends Controller
 {
@@ -20,7 +21,7 @@ class AdminController extends Controller
         $lessonMasters = LessonMaster::all(); // 追加
         $staffs = Staff::all(); // 追加
         $lessonTimeSlot = LessonTimeSlot::all(); // 追加
-        $lessonScadules = LessonSchedule::where('year_month', $year . sprintf('%02d', $month))->get(); // 追加
+        $lessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month); // 変更
         $scheduleData = ScheduleService::generateScheduleData($lessonScadules); // 変更
         // dd($scheduleData); // 追加
         // $scheduleData = $this->getScheduleData(); // 追加
@@ -32,7 +33,6 @@ class AdminController extends Controller
         $validatedData = $request->validated();
         $validatedData['lesson_time_slot_id'] = LessonTimeSlot::where('class_name', $validatedData['lesson_time_slot_name'])->first()->id;
         LessonSchedule::create($validatedData);
-
 
         return redirect()->route('admin.index')->with('success', 'スケジュールが保存されました');
     }

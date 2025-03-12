@@ -74,6 +74,14 @@ class LessonMasterSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'レッスンなし',
+                'level' => 0,
+                'category' => 0, // なし
+                'max_participants' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
