@@ -12,18 +12,24 @@ class ScheduleService
 
         foreach ($lessonScadules as $schedule) {
             $timeSlot = $schedule->lesson_time_slot_id;
-            $courtNumber = $schedule->court_number;
-            $dayOfWeek = $schedule->day_of_week;
+            $courtNumber = $schedule->court_num;
+            $weekday = $schedule->weekday;
 
-            $scheduleData["{$timeSlot}"][$courtNumber][$dayOfWeek][] = [
-                "lesson_id" => $schedule->lesson_id,
-                "class" => $schedule->class,
-                "coach_id" => $schedule->coach_id,
-                "coach" => $schedule->mainCoach->name,
-                "lesson_time_slot_id" => $schedule->lesson_time_slot_id,
-                "class_name" => $schedule->class_name,
-                "start_time" => $schedule->start_time,
-                "end_time" => $schedule->end_time,
+            $scheduleData["{$timeSlot}"][$courtNumber][$weekday] = [
+                [
+                    "lesson_id" => $schedule->lesson_id,
+                    "class" => $schedule->class,
+                ],
+                [
+                    "coach_id" => $schedule->coach_id,
+                    "coach" => $schedule->mainCoach->last_name . ' ' . $schedule->mainCoach->first_name,
+                ],
+                [
+                    "lesson_time_slot_id" => $schedule->lesson_time_slot_id,
+                    "class_name" => $schedule->class_name,
+                    "start_time" => $schedule->start_time,
+                    "end_time" => $schedule->end_time,
+                ]
             ];
         }
 

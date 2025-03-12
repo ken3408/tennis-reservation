@@ -58,6 +58,7 @@
                   @endif
                   <td class="court-num">{{ $courtNum }}</td>
                   @foreach (range(1, 5) as $day)
+                    <!-- 月曜日から金曜日 -->
                     <td data-weekday-index="{{ $day }}"
                       data-lesson-id="{{ $schedule[$day][0]['lesson_id'] ?? '' }}"
                       data-coach-id="{{ $schedule[$day][1]['coach_id'] ?? '' }}"
