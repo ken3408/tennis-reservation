@@ -28,8 +28,10 @@
       </h2>
 
       <div class="day-toggle">
-        <button class="day-btn active" data-day="weekday">平日</button>
-        <button class="day-btn" data-day="weekend">土日</button>
+        <div class="tabs-list">
+          <button class="day-btn active" data-day="weekday">平日</button>
+          <button class="day-btn" data-day="weekend">土日</button>
+        </div>
       </div>
       <div class="timetable-container weekday active">
         <!-- 平日の時間割表 -->
