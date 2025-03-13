@@ -61,9 +61,6 @@ class ScheduleService
                 ]
             ];
         }
-        // `array_merge_recursive()` で `filled` を `empty` に統合
-    // $scheduleData = array_merge_recursive($scheduleData, $filledScheduleData);
-        // `filled` のデータを `empty` に統合する
         foreach ($filledScheduleData as $time => $courts) {
           foreach ($courts as $courtNumber => $weekdaysData) {
               foreach ($weekdaysData as $weekday => $lessonData) {

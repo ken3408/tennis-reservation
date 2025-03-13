@@ -13,17 +13,19 @@ use App\Repositories\LessonScheduleRepository; // 追加
 
 class AdminController extends Controller
 {
+  const WEEKDAY = "WEEKDAY";
+  const WEEKENDDAY = "WEEKENDDAY";
     public function index()
     {
         // 今年の年と月を取得
         $year = date('Y');
         $month = date('n');
-        $lessonMasters = LessonMaster::all(); // 追加
-        $staffs = Staff::all(); // 追加
-        $lessonTimeSlot = LessonTimeSlot::all(); // 追加
-        $lessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month); // 変更
+        $lessonMasters = LessonMaster::all(); // マスターデータ
+        $staffs = Staff::all(); // マスターデータ
+        $lessonTimeSlot = LessonTimeSlot::all(); // マスターデータ
+        $lessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month, self::WEEKDAY); // 変更
         $scheduleData = ScheduleService::generateScheduleData($lessonScadules); // 変更
-
+        $weekEndLessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month, self::WEEKENDDAY);
         // $scheduleData = $this->getScheduleData(); // 追加
         return view('admin.index', compact('year', 'month', 'lessonMasters', 'staffs', 'lessonTimeSlot', 'scheduleData'));
     }
@@ -31,7 +33,9 @@ class AdminController extends Controller
     public function storeSchedule(StoreScheduleRequest $request)
     {
         $validatedData = $request->validated();
-        $validatedData['lesson_time_slot_id'] = LessonTimeSlot::where('class_name', $validatedData['lesson_time_slot_name'])->first()->id;
+        $validatedData['lesson_time_slot_id'] = LessonTimeSlot::where('class_name', $validatedData['lesson_time_slot_name'])
+        ->where('weekday_type', $validatedData['lesson_time_slot_weekday_type'])
+        ->first()->id;
         $lessonSchedule = LessonSchedule::create($validatedData);
 
         return response()->json(['message' => 'スケジュールが保存されました', 'data' => $lessonSchedule], 201);

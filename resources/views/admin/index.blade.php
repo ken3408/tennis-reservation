@@ -92,405 +92,136 @@
           </tbody>
         </table>
       </div>
-
       <div class="timetable-container weekend">
-        <table class="timetable">
-          <thead>
-            <tr>
-              <th>時間</th>
-              <th>コート</th>
-              <th colspan="2">土</th>
-              <th colspan="2">日</th>
-            </tr>
-            <tr>
-              <th></th>
-              <th></th>
-              <th>担当クラス</th>
-              <th>担当コーチ</th>
-              <th>担当クラス</th>
-              <th>担当コーチ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- A コート -->
-            <tr>
-              <td rowspan="4" class="time-cell">A</td>
-              <td>1</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
+        <div class="weekend-tables-container">
+          <!-- 一般クラス -->
+          <div class="weekend-schedule-table-wrapper">
+            <h2 class="weekend-table-title">一般クラス</h2>
+            <div class="weekend-table-responsive">
+              <table class="timetable">
+                <thead>
+                  <tr>
+                    <th>時間</th>
+                    <th>コート</th>
+                    <th>土</th>
+                    <th>日</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($scheduleData as $lessonTime => $times)
+                    @foreach ($times as $courtNum => $schedule)
+                      <tr>
+                        @if ($loop->first)
+                          <td rowspan="{{ count($times) }}" class="time-cell">
+                            <!-- A -->
+                            {{ explode(' ', $lessonTime)[0] }}
+                            <!-- 10:30〜12:00 -->
+                            <div class="text-xs text-muted-foreground">{{ explode(' ', $lessonTime)[1] }}</div>
+                          </td>
+                        @endif
+                        <td class="court-num">{{ $courtNum }}</td>
+                        <!-- 月曜日から金曜日 -->
+                        @foreach (range(1, 2) as $day)
+                          <td data-weekendday-index="{{ $day }}"
+                            data-lesson_schedule_id="{{ $schedule[$day][0]['lesson_schedule_id'] ?? '' }}"
+                            data-lesson-id="{{ $schedule[$day][0]['lesson_id'] ?? '' }}"
+                            data-coach-id="{{ $schedule[$day][1]['coach_id'] ?? '' }}"
+                            data-lesson_time_slot_class_name="{{ explode(' ', $lessonTime)[0] }}"
+                            data-lesson_time_slot_weekday_type="WEEKENDDAY"
+                            data-lesson-time="{{ explode(' ', $lessonTime)[0] }}"
+                            data-time-range="{{ explode(' ', $lessonTime)[1] }}">
+                            @if (!empty($schedule[$day]))
+                              @foreach ($schedule[$day] as $info)
+                                @if (isset($info['class']))
+                                  {{-- レッスン名 --}}
+                                  <div class="class">{{ $info['class'] }}</div>
+                                @endif
+                                @if (isset($info['coach']))
+                                  {{-- コーチ名 --}}
+                                  <div class="coach">{{ $info['coach'] }}</div>
+                                @endif
+                              @endforeach
+                            @else
+                              <div class="class">レッスンなし</div>
+                            @endif
+                          </td>
+                        @endforeach
+                      </tr>
+                    @endforeach
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-            <!-- B コート -->
-            <tr>
-              <td rowspan="4" class="time-cell">B</td>
-              <td>1</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
+          <!-- ジュニアクラス -->
+          <div class="weekend-schedule-table-wrapper">
+            <h2 class="weekend-table-title">ジュニアクラス</h2>
+            <div class="weekend-table-responsive">
+              <table class="weekend-schedule-table">
+                <thead>
+                  <tr>
+                    <th class="weekend-time-header">時間</th>
+                    <th>土</th>
+                    <th>日</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- A時間帯 -->
+                  <tr>
+                    <td class="weekend-time-cell">A</td>
+                    <td>
+                      <div class="weekend-class-info">
+                        <span class="class">ジュニアクラス A</span>
+                        <span class="coach">田中コーチ</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="weekend-class-info">
+                        <span class="class">ジュニアクラス A</span>
+                        <span class="coach">高橋コーチ</span>
+                      </div>
+                    </td>
+                  </tr>
 
-            <!-- C コート -->
-            <tr>
-              <td rowspan="4" class="time-cell">C</td>
-              <td>1</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
+                  <!-- B時間帯 -->
+                  <tr>
+                    <td class="weekend-time-cell">B</td>
+                    <td>
+                      <div class="weekend-class-info">
+                        <span class="class">ジュニアクラス B</span>
+                        <span class="coach">伊藤コーチ</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="weekend-class-info">
+                        <span class="class">ジュニアクラス B</span>
+                        <span class="coach">田中コーチ</span>
+                      </div>
+                    </td>
+                  </tr>
 
-            <!-- D コート -->
-            <tr>
-              <td rowspan="4" class="time-cell">D</td>
-              <td>1</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-
-            <!-- E コート -->
-            <tr>
-              <td rowspan="4" class="time-cell">E</td>
-              <td>1</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-
-            <!-- F コート -->
-            <tr>
-              <td rowspan="4" class="time-cell">F</td>
-              <td>1</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-              <td>
-                <div class="class">担当クラス</div>
-              </td>
-              <td>
-                <div class="coach"></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                  <!-- C時間帯 -->
+                  <tr>
+                    <td class="weekend-time-cell">C</td>
+                    <td>
+                      <div class="weekend-class-info">
+                        <span class="class">ジュニアクラス C</span>
+                        <span class="coach">高橋コーチ</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="weekend-class-info">
+                        <span class="class">ジュニアクラス C</span>
+                        <span class="coach">伊藤コーチ</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- モーダル -->

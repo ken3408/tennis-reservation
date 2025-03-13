@@ -31,11 +31,18 @@ $(document).ready(function () {
     const time = currentCell.data("lesson-time");
     const timeRange = currentCell.data("time-range");
     const court = currentCell.closest("tr").find(".court-num").text().trim();
-
-    // 曜日を取得（列のインデックスから計算）
-    const dayIndex = $(this).data("weekday-index") - 1; // 最初の2列（時間とコート）を除く
-    const days = ["月", "火", "水", "木", "金"];
-    const day = days[dayIndex]; // インデックスに対応する曜日を取得
+    let dayIndex = ""; // 曜日を取得（列のインデックスから計算）
+    let days = []; // 曜日を取得（列のインデックスから計算）
+    let day = ""; // インデックスに対応する曜日を取得
+    // もしweekendクラスがあれば、weekendday-indexを取得
+    if ($(this).data("weekendday-index")) {
+      dayIndex = $(this).data("weekendday-index") - 1; // 最初の2列（時間とコート）を除く
+      days = ["土", "日"];
+    } else {
+      dayIndex = $(this).data("weekday-index") - 1; // 最初の2列（時間とコート）を除く
+      days = ["月", "火", "水", "木", "金"];
+    }
+    day = days[dayIndex]; // インデックスに対応する曜日を取得
 
     // クラスとコーチの情報を取得
     const classValue = $(this).find(".class").text().trim();

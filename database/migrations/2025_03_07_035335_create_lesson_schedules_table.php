@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('lesson_time_slots', function (Blueprint $table) {
             $table->id();
             $table->string('class_name')->comment('クラス名 (A, B, C, D, E, F, Jr1)');
-            $table->enum('weekday_type', ['WEEKDAY', 'SATURDAY', 'SUNDAY'])->comment('曜日タイプ: 平日, 土曜, 日曜');
+            $table->enum('weekday_type', ['WEEKDAY', 'WEEKENDDAY', 'SATURDAY-JR'])->comment('曜日タイプ: 平日, 土曜, 日曜');
             $table->time('start_time')->comment('開始時間');
             $table->time('end_time')->comment('終了時間');
             $table->timestamps();
