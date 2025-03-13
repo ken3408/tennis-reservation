@@ -45,6 +45,7 @@ class ScheduleService
             $time = $className . ' ' . $lessonTime;
             $filledScheduleData["{$time}"][$courtNumber][$weekday] = [
                 [
+                    "lesson_schedule_id" => $schedule->id,
                     "lesson_id" => $schedule->lesson_master_id,
                     "class" => $schedule->LessonMaster->name,
                 ],

@@ -39,7 +39,6 @@ $(document).ready(function () {
 
     // クラスとコーチの情報を取得
     const classValue = $(this).find(".class").text().trim();
-    const coachValue = $(this).find(".coach").text().trim();
     const lessonId = $(this).data("lesson-id");
     const coachId = $(this).data("coach-id");
 
@@ -66,7 +65,7 @@ $(document).ready(function () {
 
   // クラス選択時の処理
   $("#classSelect").on("change", function () {
-    const selectedClass = $(this).val();
+    const selectedClass = $("#classSelect option:selected").text();
 
     if (selectedClass === "レッスンなし") {
       // レッスンなしの場合、コーチ選択を無効化
@@ -86,11 +85,17 @@ $(document).ready(function () {
   });
 
   // route関数の定義
-  function route(name) {
-    const routes = {
-      "admin.schedule.store": "/admin/schedule/store",
-    };
-    return routes[name];
+  function route(id = null) {
+    if (id) {
+      return `/admin/schedule/${id}`;
+    } else {
+      return "/admin/schedule";
+    }
+  }
+  function getMethod(lessonScheduleId, selectedCoachId) {
+    if (lessonScheduleId && selectedCoachId === "") return "DELETE"; // コーチが選択されていない場合は削除
+    if (!lessonScheduleId) return "POST"; // IDがない場合は新規作成
+    return "PUT"; // 既存データの更新
   }
 
   // 保存ボタンの処理
@@ -110,6 +115,7 @@ $(document).ready(function () {
       "lesson_time_slot_weekday_type"
     );
     const court = $("#courtValue").text();
+    const lessonScheduleId = currentCell.data("lesson_schedule_id"); // 追加
 
     // セルの内容を更新
     if (selectedClass === "レッスンなし") {
@@ -125,6 +131,11 @@ $(document).ready(function () {
             `);
     }
 
+    // セルのデータ属性を更新
+    currentCell.data("lesson-id", selectedClassId);
+    currentCell.data("coach-id", selectedCoachId);
+    currentCell.data("lesson_schedule_id", lessonScheduleId);
+
     // モーダルを閉じる
     $("#editModal").hide();
 
@@ -139,8 +150,8 @@ $(document).ready(function () {
       lesson_time_slot_weekday_type: timeSlotWeekdayType,
     };
 
-    fetch(`${route("admin.schedule.store")}`, {
-      method: "POST",
+    fetch(`${route(lessonScheduleId)}`, {
+      method: getMethod(lessonScheduleId, selectedCoachId), // 修正
       headers: {
         "Content-Type": "application/json",
         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -155,6 +166,19 @@ $(document).ready(function () {
       })
       .then((data) => {
         console.log("Success:", data);
+        // data.data.idが存在するなら、新規作成時のIDを lesson_schedule_id にセット (追加)
+        if (data.data.id) {
+          currentCell.attr("data-lesson_schedule_id", data.data.id);
+          currentCell.attr("data-lesson-id", data.data.lesson_master_id);
+          currentCell.attr("data-coach-id", data.data.staff_id);
+          console.log(currentCell.attr("data-lesson_schedule_id"));
+          console.log(currentCell.attr("data-lesson-id"));
+          console.log(currentCell.attr("data-coach-id"));
+        } else {
+          currentCell.attr("data-lesson-schedule-id", null);
+          currentCell.attr("data-lesson-id", null);
+          currentCell.attr("data-coach-id", null);
+        }
       })
       .catch((error) => {
         console.error("Error:", error);

@@ -61,6 +61,7 @@
                   <!-- 月曜日から金曜日 -->
                   @foreach (range(1, 5) as $day)
                     <td data-weekday-index="{{ $day }}"
+                      data-lesson_schedule_id="{{ $schedule[$day][0]['lesson_schedule_id'] ?? '' }}"
                       data-lesson-id="{{ $schedule[$day][0]['lesson_id'] ?? '' }}"
                       data-coach-id="{{ $schedule[$day][1]['coach_id'] ?? '' }}"
                       data-lesson_time_slot_class_name="{{ explode(' ', $lessonTime)[0] }}"
