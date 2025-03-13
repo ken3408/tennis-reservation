@@ -1,269 +1,283 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "メイリオ",
+    sans-serif;
+}
 
-  body {
-    background-color: #f5f5f5;
-    color: #333;
-  }
+body {
+  background-color: #f5f5f5;
+  color: #333;
+}
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-  }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
 
-  /* ヘッダー */
-  header {
-    background-color: #1a1a1a;
-    color: white;
-    padding: 15px 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+/* ヘッダー */
+header {
+  background-color: #1a1a1a;
+  color: white;
+  padding: 15px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-  header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+header h1 {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.calendar-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.user-info {
+  font-size: 0.9rem;
+}
+
+/* メインコンテンツ */
+main {
+  padding: 30px 0;
+}
+
+.tab-content {
+  background-color: white;
+  border-radius: 4px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 時間割表 */
+h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.day-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+.tabs-list {
+  display: inline-flex;
+  height: 2.5rem;
+  padding: 0.25rem;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+}
+
+.day-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  border-radius: 0.25rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.day-btn:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.day-btn:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.day-btn.active {
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.timetable-container {
+  overflow-x: auto;
+  display: none;
+}
+
+.timetable-container.active {
+  display: block;
+}
+
+.timetable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.timetable th,
+.timetable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.timetable th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.time-cell {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.class {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.coach {
+  font-weight: bold;
+  min-height: 1.2em;
+}
+
+/* 土日用テーブルのスタイル調整 */
+.weekend .timetable th[colspan="2"] {
+  background-color: #f0f0f0;
+  width: 25%;
+}
+
+.weekend .timetable td {
+  width: 12.5%;
+}
+
+.weekend .timetable th:empty {
+  border: none;
+  background: none;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
   header h1 {
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
+    font-size: 1.2rem;
   }
 
-  .calendar-icon {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
-  .user-info {
-    font-size: 0.9rem;
-  }
-
-  /* メインコンテンツ */
-  main {
-    padding: 30px 0;
-  }
-
-  .tab-content {
-    background-color: white;
-    border-radius: 4px;
-    padding: 20px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  /* 時間割表 */
-  h2 {
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-  }
-
-  .day-toggle {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 15px;
-  }
-
-  .day-btn {
-    padding: 5px 15px;
-    border: 1px solid #ddd;
-    background-color: #f5f5f5;
-    cursor: pointer;
-    font-size: 0.9rem;
-  }
-
-  .day-btn:first-child {
-    border-radius: 4px 0 0 4px;
-  }
-
-  .day-btn:last-child {
-    border-radius: 0 4px 4px 0;
-  }
-
-  .day-btn.active {
-    background-color: #4a6da7;
-    color: white;
-    border-color: #4a6da7;
-  }
-
-  .timetable-container {
-    overflow-x: auto;
-    display: none;
-  }
-
-  .timetable-container.active {
-    display: block;
-  }
-
-  .timetable {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-  }
-
-  .timetable th, .timetable td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-  }
-
-  .timetable th {
-    background-color: #f5f5f5;
-    font-weight: bold;
-  }
-
-  .time-cell {
-    background-color: #f0f0f0;
-    font-weight: bold;
-    font-size: 1.1rem;
+  .timetable th,
+  .timetable td {
+    padding: 8px 5px;
+    font-size: 0.8rem;
   }
 
   .class {
-    font-size: 0.8rem;
-    color: #666;
-    margin-bottom: 5px;
+    font-size: 0.7rem;
   }
 
   .coach {
-    font-weight: bold;
-    min-height: 1.2em;
+    font-size: 0.8rem;
   }
 
-  /* 土日用テーブルのスタイル調整 */
   .weekend .timetable th[colspan="2"] {
-    background-color: #f0f0f0;
-    width: 25%;
+    font-size: 0.8rem;
   }
 
   .weekend .timetable td {
-    width: 12.5%;
+    padding: 5px 3px;
   }
-
-  .weekend .timetable th:empty {
-    border: none;
-    background: none;
-  }
-
-  /* レスポンシブ対応 */
-  @media (max-width: 768px) {
-    header h1 {
-        font-size: 1.2rem;
-    }
-
-    .timetable th, .timetable td {
-        padding: 8px 5px;
-        font-size: 0.8rem;
-    }
-
-    .class {
-        font-size: 0.7rem;
-    }
-
-    .coach {
-        font-size: 0.8rem;
-    }
-
-    .weekend .timetable th[colspan="2"] {
-        font-size: 0.8rem;
-    }
-
-    .weekend .timetable td {
-        padding: 5px 3px;
-    }
-  }
+}
 
 /* モーダルスタイル */
 .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-  }
-  .modal {
-    background-color: white;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 500px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-  }
-  .modal-header {
-    padding: 16px 24px;
-    border-bottom: 1px solid #e2e8f0;
-  }
-  .modal-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0;
-  }
-  .modal-body {
-    padding: 24px;
-  }
-  .modal-footer {
-    padding: 16px 24px;
-    border-top: 1px solid #e2e8f0;
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-  }
-  .form-group {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    gap: 16px;
-    margin-bottom: 16px;
-    align-items: center;
-  }
-  .form-label {
-    text-align: right;
-    font-weight: 500;
-  }
-  .form-control {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-  }
-  .btn {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .btn-primary {
-    background-color: #3b82f6;
-    color: white;
-  }
-  .btn-outline {
-    background-color: white;
-    border: 1px solid #d1d5db;
-  }
-  .close-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  .helper-text {
-    font-size: 12px;
-    color: #64748b;
-    margin-top: 4px;
-  }
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+.modal {
+  background-color: white;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+.modal-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+.modal-body {
+  padding: 24px;
+}
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.form-group {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+.form-label {
+  text-align: right;
+  font-weight: 500;
+}
+.form-control {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+}
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-primary {
+  background-color: #3b82f6;
+  color: white;
+}
+.btn-outline {
+  background-color: white;
+  border: 1px solid #d1d5db;
+}
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+.helper-text {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
