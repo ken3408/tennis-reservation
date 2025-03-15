@@ -15,6 +15,7 @@ class AdminController extends Controller
 {
   const WEEKDAY = "WEEKDAY";
   const WEEKENDDAY = "WEEKENDDAY";
+  const SATURDAY_JR = "SATURDAY-JR";
     public function index()
     {
         // 今年の年と月を取得
@@ -23,11 +24,21 @@ class AdminController extends Controller
         $lessonMasters = LessonMaster::all(); // マスターデータ
         $staffs = Staff::all(); // マスターデータ
         $lessonTimeSlot = LessonTimeSlot::all(); // マスターデータ
+
         $lessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month, self::WEEKDAY); // 変更
-        $scheduleData = ScheduleService::generateScheduleData($lessonScadules); // 変更
+        $scheduleData = ScheduleService::generateScheduleData($lessonScadules, self::WEEKDAY); // 変更
+
         $weekEndLessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month, self::WEEKENDDAY);
+        $weekEndScheduleData = ScheduleService::generateScheduleData($weekEndLessonScadules, self::WEEKENDDAY);
+
+
+        $saturdayJrLessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month, self::SATURDAY_JR);
+        $saturdayJrScheduleData = ScheduleService::generateScheduleData($saturdayJrLessonScadules, self::SATURDAY_JR);
+
+
+
         // $scheduleData = $this->getScheduleData(); // 追加
-        return view('admin.index', compact('year', 'month', 'lessonMasters', 'staffs', 'lessonTimeSlot', 'scheduleData'));
+        return view('admin.index', compact('year', 'month', 'lessonMasters', 'staffs', 'lessonTimeSlot', 'scheduleData', 'weekEndScheduleData', 'saturdayJrScheduleData'));
     }
 
     public function storeSchedule(StoreScheduleRequest $request)

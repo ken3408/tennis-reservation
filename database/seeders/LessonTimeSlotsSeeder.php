@@ -28,10 +28,10 @@ class LessonTimeSlotsSeeder extends Seeder
             ['class_name' => 'F', 'weekday_type' => 'WEEKENDDAY', 'start_time' => '17:30', 'end_time' => '19:20'],
 
             // ジュニアクラス
-            ['class_name' => 'Jr1', 'weekday_type' => 'SATURDAY-JR', 'start_time' => '10:50', 'end_time' => '11:50'],
-            ['class_name' => 'Jr1', 'weekday_type' => 'SATURDAY-JR', 'start_time' => '11:50', 'end_time' => '12:50'],
-            ['class_name' => 'Jr2', 'weekday_type' => 'SATURDAY-JR', 'start_time' => '13:00', 'end_time' => '14:30'],
-            ['class_name' => 'Jr1', 'weekday_type' => 'SATURDAY-JR', 'start_time' => '14:50', 'end_time' => '15:50'],
+            ['class_name' => 'J-B', 'weekday_type' => 'SATURDAY-JR', 'start_time' => '10:50', 'end_time' => '11:50'],
+            ['class_name' => 'J-C', 'weekday_type' => 'SATURDAY-JR', 'start_time' => '11:50', 'end_time' => '12:50'],
+            ['class_name' => 'J-CD', 'weekday_type' => 'SATURDAY-JR', 'start_time' => '13:00', 'end_time' => '14:30'],
+            ['class_name' => 'J-D', 'weekday_type' => 'SATURDAY-JR', 'start_time' => '14:50', 'end_time' => '15:50'],
         ]);
     }
 }
