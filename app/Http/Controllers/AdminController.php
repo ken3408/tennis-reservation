@@ -25,20 +25,20 @@ class AdminController extends Controller
         $staffs = Staff::all(); // マスターデータ
         $lessonTimeSlot = LessonTimeSlot::all(); // マスターデータ
 
+        // 平日のスケジュールデータを取得
         $lessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month, self::WEEKDAY); // 変更
         $scheduleData = ScheduleService::generateScheduleData($lessonScadules, self::WEEKDAY); // 変更
 
+        // 休日のスケジュールデータを取得
         $weekEndLessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month, self::WEEKENDDAY);
         $weekEndScheduleData = ScheduleService::generateScheduleData($weekEndLessonScadules, self::WEEKENDDAY);
         $lessonTimeSlotSaturdayJrData = LessonTimeSlot::compareWeekendAndSaturdayJrTimes();
         $weekEndScheduleData = array_replace_recursive($weekEndScheduleData, $lessonTimeSlotSaturdayJrData);
 
+        // 土曜日ジュニアのスケジュールデータを取得
         $saturdayJrLessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month, self::SATURDAY_JR);
         $saturdayJrScheduleData = ScheduleService::generateScheduleData($saturdayJrLessonScadules, self::SATURDAY_JR);
 
-
-
-        // $scheduleData = $this->getScheduleData(); // 追加
         return view('admin.index', compact('year', 'month', 'lessonMasters', 'staffs', 'lessonTimeSlot', 'scheduleData', 'weekEndScheduleData', 'saturdayJrScheduleData'));
     }
 

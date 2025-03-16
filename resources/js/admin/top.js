@@ -27,6 +27,11 @@ $(document).ready(function () {
       return;
     }
 
+    // クラスが「ジュニア」の場合、クリックイベントを発生させない
+    if ($(this).find(".class").text().trim() === "ジュニア") {
+      return;
+    }
+
     // セルの情報を取得
     const time = currentCell.data("lesson-time");
     const timeRange = currentCell.data("time-range");

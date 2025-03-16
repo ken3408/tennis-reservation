@@ -134,7 +134,12 @@
                               @foreach ($schedule[$day] as $info)
                                 @if (isset($info['class']))
                                   {{-- レッスン名 --}}
-                                  <div class="class">{{ $info['class'] }}</div>
+                                  {{-- もしクラスがジュニアならjunior-classを付与 --}}
+                                  @if ($info['class'] === 'ジュニア')
+                                    <div class="class junior-class">{{ $info['class'] }}</div>
+                                  @else
+                                    <div class="class">{{ $info['class'] }}</div>
+                                  @endif
                                 @endif
                                 @if (isset($info['coach']))
                                   {{-- コーチ名 --}}

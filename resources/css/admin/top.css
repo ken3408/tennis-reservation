@@ -12,7 +12,7 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 0 15px;
 }
@@ -150,6 +150,10 @@ h2 {
 .coach {
   font-weight: bold;
   min-height: 1.2em;
+}
+
+.junior-class {
+  color: red;
 }
 
 /* 土日用テーブルのスタイル調整 */
