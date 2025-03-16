@@ -7,6 +7,7 @@
   <title>管理画面</title>
   {{-- home.cssを読み込ませる  --}}
   @vite('resources/css/admin/top.css')
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   {{-- jquery読み込ませる --}}
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   {{-- home.jsを読み込ませる  --}}
@@ -24,8 +25,25 @@
 
   <main class="container">
     <div class="tab-content" id="timetable">
-      <h2>シフト表　{{ $year }}年{{ $month }}月
-      </h2>
+      <!-- 月切り替えと確定ボタン -->
+      <div class="controls">
+        <div class="month-selector">
+          {{-- <h2>シフト表</h2> --}}
+          <div class="month-controls">
+            <button id="prev-month" class="month-button">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <span id="current-month" class="current-month">{{ $year }}年{{ $month }}月</span>
+            <button id="next-month" class="month-button">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+        <button id="confirm-shift" class="confirm-button">
+          <i class="fa-solid fa-check"></i>
+          シフト確定
+        </button>
+      </div>
 
       <div class="day-toggle">
         <div class="tabs-list">
