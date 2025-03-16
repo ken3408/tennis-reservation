@@ -30,7 +30,8 @@ class AdminController extends Controller
 
         $weekEndLessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month, self::WEEKENDDAY);
         $weekEndScheduleData = ScheduleService::generateScheduleData($weekEndLessonScadules, self::WEEKENDDAY);
-
+        $lessonTimeSlotSaturdayJrData = LessonTimeSlot::compareWeekendAndSaturdayJrTimes();
+        $weekEndScheduleData = array_replace_recursive($weekEndScheduleData, $lessonTimeSlotSaturdayJrData);
 
         $saturdayJrLessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month, self::SATURDAY_JR);
         $saturdayJrScheduleData = ScheduleService::generateScheduleData($saturdayJrLessonScadules, self::SATURDAY_JR);

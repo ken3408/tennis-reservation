@@ -29,8 +29,34 @@ class LessonTimeSlot extends Model
         })->toArray();
     }
 
-    public function isJuniorClass($startTime, $endTime)
+    public static function compareWeekendAndSaturdayJrTimes()
     {
-        return $this->weekday_type === 'SATURDAY-JR' && $this->start_time === $startTime && $this->end_time === $endTime;
+        $weekendDayData = self::where('weekday_type', 'WEEKENDDAY')->get();
+        $saturdayJrData = self::where('weekday_type', 'SATURDAY-JR')->get();
+        $result = [];
+
+        foreach ($weekendDayData as $weekend) {
+            $weekendStart = Carbon::parse($weekend->start_time);
+            $weekendEnd = Carbon::parse($weekend->end_time);
+            $saturdayClasses = [];
+
+            foreach ($saturdayJrData as $saturday) {
+                $saturdayStart = Carbon::parse($saturday->start_time);
+                $saturdayEnd = Carbon::parse($saturday->end_time);
+
+                if ($weekendStart < $saturdayEnd && $saturdayStart < $weekendEnd) {
+                    $saturdayClasses[] = ["class" => "ジュニア"];
+                    break; // 他のクラスがあれば追加しない
+                }
+            }
+
+            $result[$weekend->class_name . ' ' . $weekendStart->format('H:i') . '〜' . $weekendEnd->format('H:i')] = [
+                '1' => [ // コート番号
+                    '1' => $saturdayClasses // 土曜日のクラス
+                ]
+            ];
+        }
+
+        return $result;
     }
 }
