@@ -39,7 +39,8 @@
             </button>
           </div>
         </div>
-        <button id="confirm-shift" class="confirm-button">
+        <button id="confirm-shift" class="confirm-button" data-year="{{ $year }}"
+          data-month="{{ $month }}">
           <i class="fa-solid fa-check"></i>
           シフト確定
         </button>
@@ -238,6 +239,10 @@
         </div>
       </div>
     </div>
+    {{-- シフト確定モーダル --}}
+    <x-confirm-modal title="{{ $year }}年{{ $month }}月のシフトを確定しますか？">
+      <img src="{{ Vite::asset('resources/images/undraw_confirm_rds7.png') }}" alt="予約内容">
+    </x-confirm-modal>
     <!-- モーダル -->
     <div class="modal-overlay" id="editModal">
       <div class="modal">

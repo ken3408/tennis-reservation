@@ -22,4 +22,6 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin.index'); //
 Route::post('/admin/schedule', [AdminController::class, 'storeSchedule'])->name('admin.schedule.store');
 Route::put('/admin/schedule/{id}', [AdminController::class, 'updateSchedule'])->name('admin.schedule.update');
 Route::delete('/admin/schedule/{id}', [AdminController::class, 'deleteSchedule'])->name('admin.schedule.delete'); // 追加
+Route::post('/admin/schedule/detail', [AdminController::class, 'storeScheduleDetail'])->name('admin.schedule.detail.store');
+
 

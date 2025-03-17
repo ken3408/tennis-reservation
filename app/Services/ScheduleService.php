@@ -103,4 +103,24 @@ class ScheduleService
 
         return $weekdays[$weekday] ?? $weekday;
     }
+    public function getDatesFromYearMonthAndWeekday($yearMonth, $weekday)
+    {
+        $dates = [];
+        $year = substr($yearMonth, 0, 4);  // 年 (YYYY)
+        $month = substr($yearMonth, 4, 2); // 月 (MM)
+
+        // 月の初日を取得
+        $date = Carbon::create($year, $month, 1);
+        $endOfMonth = $date->endOfMonth();
+
+        // 指定された曜日に一致する日付を取得
+        while ($date->lte($endOfMonth)) {
+            if ($date->isoWeekday() == $weekday) { // `isoWeekday()` は `1 = 月曜, 7 = 日曜`
+                $dates[] = $date->format('Y-m-d'); // YYYY-MM-DD 形式で追加
+            }
+            $date->addDay(); // 1日ずつ進める
+        }
+
+        return $dates;
+    }
 }

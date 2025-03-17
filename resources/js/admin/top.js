@@ -18,6 +18,50 @@ $(document).ready(function () {
     }
   });
 
+  // シフト確定ボタン
+  $("#confirm-shift").on("click", function () {
+    const year = $(this).data("year");
+    const month = $(this).data("month"); // 月を2桁にする
+    const yearMonth = year + month;
+    const dayType = $(".day-btn.active").data("day");
+    var modal = $("#confirm-modal");
+    var reserveButtons = $(".js-reservation-button");
+    var cancelButton = $("#cancel-button");
+
+    // modal.fadeIn();
+
+    // cancelButton.on("click", function () {
+    //   modal.fadeOut();
+    // });
+
+    // $(window).on("click", function (event) {
+    //   if ($(event.target).is(modal)) {
+    //     modal.hide();
+    //   }
+    // });
+
+    fetch(`/admin/schedule/detail/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+        alert("シフトを確定しました");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+
   // セルをクリックしたときのモーダル表示
   $(".timetable td").on("click", function () {
     // クリックされたセルを保存
