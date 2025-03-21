@@ -225,7 +225,7 @@
           </svg>
           日付一覧へ戻る
         </a>
-        <h2 class="page-title">{{ $year }}年{{ $month }}月{{ $month }}日（{{ $weekday }}）のシフト
+        <h2 class="page-title">{{ $year }}年{{ $month }}月{{ $day }}日（{{ $weekday }}）のシフト
         </h2>
       </div>
 
@@ -240,141 +240,45 @@
         </div>
       </div>
 
-      <div id="shift-info-A" class="shift-info active">
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 10%;">コート</th>
-                <th style="width: 40%;">レベル</th>
-                <th style="width: 40%;">コーチ</th>
-                <th style="width: 10%;">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>初級</td>
-                <td>山田 太郎</td>
-                <td>
-                  <a href="/details/20250303/A/1" class="edit-button">編集</a>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>初中級</td>
-                <td>松本 五郎</td>
-                <td>
-                  <a href="/details/20250303/A/2" class="edit-button">編集</a>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>シングル</td>
-                <td>鈴木 花子</td>
-                <td>
-                  <a href="/details/20250303/A/3" class="edit-button">編集</a>
-                </td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>初心</td>
-                <td>山田 太郎</td>
-                <td>
-                  <a href="/details/20250303/A/4" class="edit-button">編集</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      @foreach ($lessons as $lessonTime => $lessonDetails)
+        <div id="shift-info-{{ $lessonTime }}" class="shift-info active">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 10%;">コート</th>
+                  <th style="width: 40%;">レベル</th>
+                  <th style="width: 40%;">コーチ</th>
+                  <th style="width: 10%;">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($lessonDetails as $court_num => $lesson)
+                  <tr>
+                    <td>{{ $court_num }}</td>
+                    @if (!empty($lesson))
+                      <td>{{ $lesson['lesson_master']['name'] }}</td>
+                      <td>{{ $lesson['main_coach']['last_name'] }}
+                        {{ $lesson['main_coach']['first_name'] }}</td>
+                      <td>
+                        <a href="{{ route('admin.shift.form', ['date' => sprintf('%04d%02d%02d', $year, $month, $day), 'lesson_schedule_detail_id' => $lesson['lesson_schedule_detail_id']]) }}"
+                          class="edit-button">編集</a>
+                      </td>
+                    @else
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <a href="{{ route('admin.shift.form', ['date' => sprintf('%04d%02d%02d', $year, $month, $day)]) }}"
+                          class="edit-button">登録</a>
+                      </td>
+                    @endif
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-
-      <div id="shift-info-B" class="shift-info">
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 10%;">コート</th>
-                <th style="width: 40%;">レベル</th>
-                <th style="width: 40%;">コーチ</th>
-                <th style="width: 10%;">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>中級</td>
-                <td>佐藤 次郎</td>
-                <td>
-                  <a href="/details/20250303/B/1" class="edit-button">編集</a>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>上級</td>
-                <td>田中 三郎</td>
-                <td>
-                  <a href="/details/20250303/B/2" class="edit-button">編集</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id="shift-info-C" class="shift-info">
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 10%;">コート</th>
-                <th style="width: 40%;">レベル</th>
-                <th style="width: 40%;">コーチ</th>
-                <th style="width: 10%;">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>初級</td>
-                <td>高橋 七子</td>
-                <td>
-                  <a href="/details/20250303/C/1" class="edit-button">編集</a>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>中級</td>
-                <td>伊藤 八郎</td>
-                <td>
-                  <a href="/details/20250303/C/2" class="edit-button">編集</a>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>上級</td>
-                <td>渡辺 九子</td>
-                <td>
-                  <a href="/details/20250303/C/3" class="edit-button">編集</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id="shift-info-D" class="shift-info">
-        <p>D時間帯のシフト情報がありません。</p>
-      </div>
-
-      <div id="shift-info-E" class="shift-info">
-        <p>E時間帯のシフト情報がありません。</p>
-      </div>
-
-      <div id="shift-info-F" class="shift-info">
-        <p>F時間帯のシフト情報がありません。</p>
-      </div>
-
+      @endforeach
     </div>
   </main>
 

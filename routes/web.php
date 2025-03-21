@@ -24,6 +24,8 @@ Route::put('/admin/schedule/{id}', [AdminController::class, 'updateSchedule'])->
 Route::delete('/admin/schedule/{id}', [AdminController::class, 'deleteSchedule'])->name('admin.schedule.delete'); // 追加
 Route::post('/admin/schedule/detail', [AdminController::class, 'storeScheduleDetail'])->name('admin.schedule.detail.store'); // 追加
 Route::get('/admin/shift', [AdminController::class, 'dateIndex'])->name('admin.date.index'); // 管理画面のルートを追加
-Route::get('/admin/shift/{date}', [AdminController::class, 'dateShift'])->name('admin.date.shift'); // 管理画面のルートを追加
-
-
+Route::get('/admin/shift/{date}', [AdminController::class, 'dateShift'])->name('admin.date.shift');
+Route::get('/admin/shift/{date}/{lesson_schedule_detail_id?}', [AdminController::class, 'dateShiftForm'])
+  ->where('date', '\d{8}') // ← 8桁の数字を受け取る
+  ->where('lesson_schedule_detail_id', '[0-9]+')
+  ->name('admin.shift.form');
