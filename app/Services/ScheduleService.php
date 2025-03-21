@@ -6,6 +6,7 @@ use App\Models\LessonSchedule;
 use App\Models\LessonTimeSlot;
 use Carbon\Carbon;
 use App\Repositories\LessonScheduleRepository; // 追加
+use App\Models\LessonScheduleDetail; // 追加
 
 class ScheduleService
 {
@@ -103,19 +104,45 @@ class ScheduleService
 
         return $weekdays[$weekday] ?? $weekday;
     }
-    public function getDatesFromYearMonthAndWeekday($yearMonth, $weekday)
+    public static function insertLessonScheduleDetails($yearMonth)
     {
+        // 対象年月のスケジュールを取得
+        $lessonSchedules = LessonSchedule::where('year_month', $yearMonth)->get();
+
+        foreach ($lessonSchedules as $schedule) {
+          $dates = self::getDatesFromYearMonthAndWeekday($schedule->year_month, $schedule->weekday);
+
+          foreach ($dates as $date) {
+              LessonScheduleDetail::updateOrCreate(
+                  [
+                      'lesson_schedule_id' => $schedule->id,
+                      'date' => $date,
+                  ],
+                  [
+                      'staff_id' => $schedule->staff_id,
+                      'is_main_substituted' => false,
+                      'sub_staff_id' => $schedule->sub_staff_id,
+                      'is_sub_substituted' => false,
+                      'reserved_count' => 0,
+                      'cancelled_count' => 0,
+                  ]
+              );
+          }
+      }
+    }
+    public static function getDatesFromYearMonthAndWeekday($yearMonth, $weekday)
+    {
+        $weekdayNumber = self::convertWeekdayToNumber($weekday);
         $dates = [];
         $year = substr($yearMonth, 0, 4);  // 年 (YYYY)
         $month = substr($yearMonth, 4, 2); // 月 (MM)
 
         // 月の初日を取得
         $date = Carbon::create($year, $month, 1);
-        $endOfMonth = $date->endOfMonth();
-
+        $endOfMonth = $date->copy()->endOfMonth(); // `copy()` を使って参照の影響を防ぐ
         // 指定された曜日に一致する日付を取得
         while ($date->lte($endOfMonth)) {
-            if ($date->isoWeekday() == $weekday) { // `isoWeekday()` は `1 = 月曜, 7 = 日曜`
+            if ($date->isoWeekday() == $weekdayNumber) { // `isoWeekday()` は `1 = 月曜, 7 = 日曜`
                 $dates[] = $date->format('Y-m-d'); // YYYY-MM-DD 形式で追加
             }
             $date->addDay(); // 1日ずつ進める
@@ -123,4 +150,17 @@ class ScheduleService
 
         return $dates;
     }
+    public static function convertWeekdayToNumber($weekday)
+  {
+      $map = [
+          "月" => 1,
+          "火" => 2,
+          "水" => 3,
+          "木" => 4,
+          "金" => 5,
+          "土" => 6,
+          "日" => 7,
+      ];
+      return $map[$weekday] ?? null; // 該当しない場合は null
+  }
 }

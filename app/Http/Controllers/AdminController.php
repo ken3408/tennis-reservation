@@ -11,6 +11,8 @@ use App\Models\LessonScheduleDetail; // 追加
 use App\Http\Requests\StoreScheduleRequest; // 追加
 use App\Services\ScheduleService; // 追加
 use App\Repositories\LessonScheduleRepository; // 追加
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB; // DBクラスをインポート
 
 class AdminController extends Controller
 {
@@ -76,38 +78,41 @@ class AdminController extends Controller
 
     public function storeScheduleDetail(Request $request)
     {
-        $yearMonth = $request->input('yearMonth');
+        $yearMonth = $request->input('year_month');
         $year = substr($yearMonth, 0, 4);
         $month = substr($yearMonth, 5, 2);
-
-        // LessonScheduleから対象のデータを取得
-        $lessonSchedules = LessonSchedule::where('year_month', $yearMonth)->get();
-
-        foreach ($lessonSchedules as $schedule) {
-            // 月の日数を取得
-            $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-
-            for ($day = 1; $day <= $daysInMonth; $day++) {
-                $date = sprintf('%04d-%02d-%02d', $year, $month, $day);
-                $weekday = date('N', strtotime($date)); // 曜日を取得 (1:月曜日, 7:日曜日)
-
-                if ($weekday == $schedule->weekday) {
-                    // 日毎の情報をlesson_schedule_detailsに追加
-                    LessonScheduleDetail::create([
-                        'lesson_schedule_id' => $schedule->id,
-                        'staff_id' => $schedule->staff_id,
-                        'is_main_substituted' => false,
-                        'sub_staff_id' => null,
-                        'is_sub_substituted' => false,
-                        'date' => $date,
-                        'reserved_count' => 0,
-                        'cancelled_count' => 0,
-                        'lesson_court_status_id' => 1, // 仮のステータスID
-                    ]);
-                }
-            }
-        }
+        ScheduleService::insertLessonScheduleDetails($yearMonth);
 
         return response()->json(['message' => 'スケジュール詳細が保存されました'], 201);
+    }
+    public function dateIndex(Request $request)
+    {
+      return view('admin.date.index');
+    }
+    public function dateShift($date, Request $request)
+    {
+        // $dateをyearとmonth、day、weekdayに分ける
+        $year = substr($date, 0, 4);
+        $month = substr($date, 4, 2);
+        $day = substr($date, 6, 2);
+        $weekday = Carbon::parse($date)->format('D');
+        // $weekdayを日本語に変換
+        $weekday = str_replace(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], ['日', '月', '火', '水', '木', '金', '土'], $weekday);
+        // $date(20240304)を-で2024-03-04のような形にする
+        $date = substr($date, 0, 4) . '-' . substr($date, 4, 2) . '-' . substr($date, 6, 2);
+
+        // $dateで平日か休日かを判定
+        $weekdayType = Carbon::parse($date)->isWeekend() ? self::WEEKENDDAY : self::WEEKDAY;
+        // $weeeekdayTypeでleesoonTimeSlotを取得
+        $lessonTimeSlots = LessonTimeSlot::where('weekday_type', $weekdayType)->get();
+
+        // lesson_schedulesをlesson_time_slot_id毎に配列分け
+        $lessons = LessonScheduleDetail::where('date', $date)
+            ->join('lesson_schedules', 'lesson_schedule_details.lesson_schedule_id', '=', 'lesson_schedules.id')
+            ->select('lesson_schedules.lesson_time_slot_id', 'lesson_schedule_details.*')
+            ->get()
+            ->groupBy('lesson_time_slot_id');
+
+        return view('admin.date.shift', compact('year','month','day','weekday','lessonTimeSlots', 'lessons'));
     }
 }

@@ -59,4 +59,27 @@ class LessonTimeSlot extends Model
 
         return $result;
     }
+    // `start_time` を `HH:MM` 形式で取得
+    public function getStartTimeAttribute($value)
+    {
+        return Carbon::createFromFormat('H:i:s', $value)->format('H:i');
+    }
+
+    // `end_time` を `HH:MM` 形式で取得
+    public function getEndTimeAttribute($value)
+    {
+        return Carbon::createFromFormat('H:i:s', $value)->format('H:i');
+    }
+
+    // `start_time` を `HH:MM` 形式で保存
+    public function setStartTimeAttribute($value)
+    {
+        $this->attributes['start_time'] = Carbon::createFromFormat('H:i', $value)->format('H:i:s');
+    }
+
+    // `end_time` を `HH:MM` 形式で保存
+    public function setEndTimeAttribute($value)
+    {
+        $this->attributes['end_time'] = Carbon::createFromFormat('H:i', $value)->format('H:i:s');
+    }
 }

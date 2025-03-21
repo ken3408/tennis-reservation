@@ -20,8 +20,8 @@ $(document).ready(function () {
 
   // シフト確定ボタン
   $("#confirm-shift").on("click", function () {
-    const year = $(this).data("year");
-    const month = $(this).data("month"); // 月を2桁にする
+    const year = String($(this).data("year")).padStart(4, "0"); // 年を4桁にする
+    const month = String($(this).data("month")).padStart(2, "0"); // 月を2桁にする
     const yearMonth = year + month;
     const dayType = $(".day-btn.active").data("day");
     var modal = $("#confirm-modal");
@@ -39,13 +39,18 @@ $(document).ready(function () {
     //     modal.hide();
     //   }
     // });
+    // データをバックエンドに送信
+    const data = {
+      year_month: yearMonth,
+    };
 
-    fetch(`/admin/schedule/detail/`, {
+    fetch(`/admin/schedule/detail`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
       },
+      body: JSON.stringify(data),
     })
       .then((response) => {
         if (!response.ok) {

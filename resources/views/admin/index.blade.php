@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   {{-- jquery読み込ませる --}}
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  {{-- home.jsを読み込ませる  --}}
+  {{-- top.jsを読み込ませる  --}}
   @vite('resources/js/admin/top.js')
   <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -39,11 +39,16 @@
             </button>
           </div>
         </div>
-        <button id="confirm-shift" class="confirm-button" data-year="{{ $year }}"
-          data-month="{{ $month }}">
-          <i class="fa-solid fa-check"></i>
-          シフト確定
-        </button>
+        <div class="action-buttons">
+          <a href="{{ route('admin.date.index') }}" class="button button-outline">
+            日付一覧
+          </a>
+          <button id="confirm-shift" class="confirm-button" data-year="{{ $year }}"
+            data-month="{{ $month }}">
+            <i class="fa-solid fa-check"></i>
+            シフト確定
+          </button>
+        </div>
       </div>
 
       <div class="day-toggle">

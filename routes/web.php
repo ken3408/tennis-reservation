@@ -22,6 +22,8 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin.index'); //
 Route::post('/admin/schedule', [AdminController::class, 'storeSchedule'])->name('admin.schedule.store');
 Route::put('/admin/schedule/{id}', [AdminController::class, 'updateSchedule'])->name('admin.schedule.update');
 Route::delete('/admin/schedule/{id}', [AdminController::class, 'deleteSchedule'])->name('admin.schedule.delete'); // 追加
-Route::post('/admin/schedule/detail', [AdminController::class, 'storeScheduleDetail'])->name('admin.schedule.detail.store');
+Route::post('/admin/schedule/detail', [AdminController::class, 'storeScheduleDetail'])->name('admin.schedule.detail.store'); // 追加
+Route::get('/admin/shift', [AdminController::class, 'dateIndex'])->name('admin.date.index'); // 管理画面のルートを追加
+Route::get('/admin/shift/{date}', [AdminController::class, 'dateShift'])->name('admin.date.shift'); // 管理画面のルートを追加
 
 
