@@ -221,4 +221,21 @@ class ScheduleService
 
     return $result;
   }
+
+  /**
+   * 日付をハイフン形式 (YYYY-MM-DD) に変換する
+   */
+  public static function convertDateToHyphenFormat($date)
+  {
+    return substr($date, 0, 4) . '-' . substr($date, 4, 2) . '-' . substr($date, 6, 2);
+  }
+
+  /**
+   * 日付から平日か休日を判定し、対応するLessonTimeSlotを取得する
+   */
+  public static function getLessonTimeSlotsByDate($date)
+  {
+    $weekdayType = Carbon::parse($date)->isWeekend() ? 'WEEKENDDAY' : 'WEEKDAY';
+    return LessonTimeSlot::where('weekday_type', $weekdayType)->get();
+  }
 }

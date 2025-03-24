@@ -8,6 +8,9 @@ use App\Models\Staff; // 追加
 use App\Models\LessonTimeSlot; // 追加
 use App\Models\LessonSchedule; // 追加
 use App\Models\LessonScheduleDetail; // 追加
+use App\Models\Student; // 追加
+use App\Models\LessonStudentRecord; // 追加
+
 use App\Http\Requests\StoreScheduleRequest; // 追加
 use App\Services\ScheduleService; // 追加
 use App\Repositories\LessonScheduleRepository; // 追加
@@ -122,16 +125,50 @@ class AdminController extends Controller
         // $weekdayを日本語に変換
         $weekday = str_replace(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], ['日', '月', '火', '水', '木', '金', '土'], $weekday);
         // $date(20240304)を-で2024-03-04のような形にする
-        $date = substr($date, 0, 4) . '-' . substr($date, 4, 2) . '-' . substr($date, 6, 2);
+        $date = ScheduleService::convertDateToHyphenFormat($date); // サービス関数を使用
 
-        // $dateで平日か休日かを判定
-        $weekdayType = Carbon::parse($date)->isWeekend() ? self::WEEKENDDAY : self::WEEKDAY;
-        // $weekdayTypeでlessonTimeSlotを取得
-        $lessonTimeSlots = LessonTimeSlot::where('weekday_type', $weekdayType)->get();
+        // 日付に基づいてLessonTimeSlotを取得
+        $lessonTimeSlots = ScheduleService::getLessonTimeSlotsByDate($date);
 
         // lesson_schedulesをlesson_time_slot_id毎に配列分け (サービスクラスに移動)
         $lessons = ScheduleService::getLessonsGroupedByTimeSlotByCourt($date, $lessonTimeSlots);
 
         return view('admin.date.shift', compact('year', 'month', 'day', 'weekday', 'lessonTimeSlots', 'lessons'));
+    }
+
+    /**
+     * シフトフォーム画面を表示する
+     */
+    public function dateShiftForm($date, $lesson_schedule_detail_id = null)
+    {
+        $year = substr($date, 0, 4);
+        $month = substr($date, 4, 2);
+        $day = substr($date, 6, 2);
+        // $date(20240304)を-で2024-03-04のような形にする
+        $date = ScheduleService::convertDateToHyphenFormat($date); // サービス関数を使用
+        // レッスン情報を取得
+        $lesssonMaster = LessonMaster::all();
+        $staffs = Staff::all();
+
+
+
+        $lessonScheduleDetail = null;
+
+        // lesson_schedule_detail_idがあれば、lesson_schedule_detailを取得
+        if ($lesson_schedule_detail_id) {
+            $lessonScheduleDetail = LessonScheduleDetail::where('id', $lesson_schedule_detail_id)
+                ->with(['lessonSchedule.lessonMaster', 'lessonSchedule.mainCoach', 'lessonSchedule.subCoach', 'lessonSchedule.lessonTimeSlot'])
+                ->first();
+            $students = LessonStudentRecord::where('lesson_schedule_detail_id', $lesson_schedule_detail_id)
+                ->with('student')
+                ->get();
+        } else {
+            // lesson_schedule_detail_idがなければ、新規作成
+            $lessonScheduleDetail = new LessonScheduleDetail();
+            // $lessonScheduleDetail->date = $date;
+            // 生徒一覧を取得
+            $students = Student::all();
+        }
+        return view('admin.date.shift_form', compact('date', 'lesson_schedule_detail_id', 'students', 'lessonScheduleDetail', 'lesssonMaster', 'staffs'));
     }
 }

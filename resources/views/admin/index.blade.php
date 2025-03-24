@@ -185,7 +185,7 @@
 
           <!-- ジュニアクラス -->
           <div class="weekend-schedule-table-wrapper">
-            <h2 class="weekend-table-title">ジュニアクラス</h2>
+            <h2 class="weekend-table-title">土曜ジュニアクラス</h2>
             <div class="weekend-table-responsive">
               <table class="timetable">
                 <thead>
