@@ -582,22 +582,24 @@
             </div>
             <div id="levelReadOnly" class="form-readonly">初級</div>
             <select id="levelSelect" class="form-control hidden">
-              <option value="初級">初級</option>
-              <option value="初中級">初中級</option>
+              @foreach ($lesssonMaster as $lesson)
+                <option value="{{ $lesson->name }}">{{ $lesson->name }}</option>
+              @endforeach
+              {{-- <option value="初級">初級</option>
+              <option value="2">3</option>
               <option value="中級">中級</option>
               <option value="中上級">中上級</option>
-              <option value="上級">上級</option>
+              <option value="上級">上級</option> --}}
             </select>
           </div>
 
           <div class="form-group">
             <label for="coach" class="form-label">コーチ:</label>
             <select id="coach" class="form-control">
-              <option value="佐藤次郎">佐藤次郎</option>
-              <option value="田中一郎">田中一郎</option>
-              <option value="鈴木花子">鈴木花子</option>
-              <option value="山田太郎">山田太郎</option>
-              <option value="高橋恵子">高橋恵子</option>
+              @foreach ($staffs as $staff)
+                <option value="{{ $staff->last_name }}{{ $staff->first_name }}">
+                  {{ $staff->last_name }}{{ $staff->first_name }}</option>
+              @endforeach
             </select>
             <div class="checkbox-group">
               <input type="checkbox" id="isSubstitute" class="checkbox">
