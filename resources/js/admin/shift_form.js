@@ -148,58 +148,65 @@ $(document).ready(function () {
       return;
     }
 
-    state.searchResults = SAMPLE_STUDENTS.filter(
-      (student) =>
-        student.id.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
-        student.name.includes(state.searchTerm)
-    );
+    // サーバーから検索結果を取得
+    $.ajax({
+      url: "/api/students/search",
+      method: "GET",
+      data: { query: state.searchTerm },
+      success: function (data) {
+        state.searchResults = data;
 
-    // 検索結果の表示
-    if (state.searchResults.length > 0) {
-      $("#searchResults").removeClass("hidden");
-      $("#noResults").addClass("hidden");
+        // 検索結果の表示
+        if (state.searchResults.length > 0) {
+          $("#searchResults").removeClass("hidden");
+          $("#noResults").addClass("hidden");
 
-      // 検索結果リストをクリア
-      $("#searchResultsList").empty();
+          // 検索結果リストをクリア
+          $("#searchResultsList").empty();
 
-      // 検索結果を表示
-      $.each(state.searchResults, function (index, student) {
-        const listItem = $("<li>").addClass("student-item");
+          // 検索結果の表示部分
+          $.each(state.searchResults, function (index, student) {
+            const listItem = $("<li>").addClass("student-item");
 
-        const studentInfo = $("<div>").addClass("student-info");
+            const studentInfo = $("<div>").addClass("student-info");
 
-        const nameSpan = $("<p>")
-          .addClass("student-name")
-          .html(
-            `${student.name} <span class="student-id">(${student.id})</span>`
-          );
+            const nameSpan = $("<p>")
+              .addClass("student-name")
+              .html(
+                `${student.name} <span class="student-id">(${student.student_number})</span>`
+              );
 
-        const levelSpan = $("<p>")
-          .addClass("student-level")
-          .text(`レベル: ${student.level}`);
+            const levelSpan = $("<p>")
+              .addClass("student-level")
+              .text(`レベル: ${student.level}`);
 
-        studentInfo.append(nameSpan, levelSpan);
-        listItem.append(studentInfo);
+            studentInfo.append(nameSpan, levelSpan);
+            listItem.append(studentInfo);
 
-        // 生徒項目全体をクリックできるようにする
-        listItem.on("click", function () {
-          if (state.students.length < state.maxCapacity) {
-            addStudent(student);
-          }
-        });
+            // 生徒項目全体をクリックできるようにする
+            listItem.on("click", function () {
+              if (state.students.length < state.maxCapacity) {
+                addStudent(student);
+              }
+            });
 
-        // 定員に達している場合は選択できないようにする
-        if (state.students.length >= state.maxCapacity) {
-          listItem.css("opacity", "0.5");
-          listItem.css("cursor", "not-allowed");
+            // 定員に達している場合は選択できないようにする
+            if (state.students.length >= state.maxCapacity) {
+              listItem.css("opacity", "0.5");
+              listItem.css("cursor", "not-allowed");
+            }
+
+            $("#searchResultsList").append(listItem);
+          });
+        } else {
+          $("#searchResults").addClass("hidden");
+          $("#noResults").removeClass("hidden");
         }
-
-        $("#searchResultsList").append(listItem);
-      });
-    } else {
-      $("#searchResults").addClass("hidden");
-      $("#noResults").removeClass("hidden");
-    }
+      },
+      error: function () {
+        console.error("生徒データの取得に失敗しました");
+      },
+    });
   }
 
   // 検索カードの表示/非表示
