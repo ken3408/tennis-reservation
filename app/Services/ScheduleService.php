@@ -189,16 +189,15 @@ class ScheduleService
   {
 
     $result = [];
-
     foreach ($lessonTimeSlots as $slot) {
       $className = $slot->class_name;
 
       // A〜F のキーを作成し、コート1〜4を空配列で初期化
       $result[$className] = [
-        1 => [],
-        2 => [],
-        3 => [],
-        4 => [],
+        1 => ['lesson_time_slot_id' => $slot->id],
+        2 => ['lesson_time_slot_id' => $slot->id],
+        3 => ['lesson_time_slot_id' => $slot->id],
+        4 => ['lesson_time_slot_id' => $slot->id],
       ];
     }
 

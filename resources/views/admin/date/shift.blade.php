@@ -239,7 +239,6 @@
           @endforeach
         </div>
       </div>
-
       @foreach ($lessons as $lessonTime => $lessonDetails)
         <div id="shift-info-{{ $lessonTime }}" class="shift-info active">
           <div class="table-container">
@@ -256,19 +255,28 @@
                 @foreach ($lessonDetails as $court_num => $lesson)
                   <tr>
                     <td>{{ $court_num }}</td>
-                    @if (!empty($lesson))
+                    @if (!empty($lesson['lesson_master']) && !empty($lesson['main_coach']))
                       <td>{{ $lesson['lesson_master']['name'] }}</td>
                       <td>{{ $lesson['main_coach']['last_name'] }}
                         {{ $lesson['main_coach']['first_name'] }}</td>
                       <td>
-                        <a href="{{ route('admin.shift.form', ['date' => sprintf('%04d%02d%02d', $year, $month, $day), 'lesson_schedule_detail_id' => $lesson['lesson_schedule_detail_id']]) }}"
+                        <a href="{{ route('admin.shift.form', [
+                            'date' => sprintf('%04d%02d%02d', $year, $month, $day),
+                            'lesson_time_slot_id' => $lesson['lesson_time_slot_id'],
+                            'court_num' => $court_num,
+                            'lesson_schedule_detail_id' => $lesson['lesson_schedule_detail_id'] ?? null,
+                        ]) }}"
                           class="edit-button">編集</a>
                       </td>
                     @else
                       <td></td>
                       <td></td>
                       <td>
-                        <a href="{{ route('admin.shift.form', ['date' => sprintf('%04d%02d%02d', $year, $month, $day)]) }}"
+                        <a href="{{ route('admin.shift.form', [
+                            'date' => sprintf('%04d%02d%02d', $year, $month, $day),
+                            'lesson_time_slot_id' => $lesson['lesson_time_slot_id'],
+                            'court_num' => $court_num,
+                        ]) }}"
                           class="edit-button">登録</a>
                       </td>
                     @endif

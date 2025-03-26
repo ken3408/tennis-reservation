@@ -525,11 +525,12 @@
           戻る
         </button>
         <h1 class="page-title">
-          <span id="lessonDate">2025年3月10日（月）</span>
+          <span id="lessonDate">{{ $year }}年{{ $month }}月{{ $day }}日（{{ $weekday }}）</span>
           <span class="separator">|</span>
-          <span id="lessonTimeSlot" class="time-slot">B 12:30〜14:00</span>
+          <span id="lessonTimeSlot" class="time-slot">{{ $lessonTimeSlot->class_name }}
+            {{ $lessonTimeSlot->start_time }}〜{{ $lessonTimeSlot->end_time }}</span>
           <span class="separator">|</span>
-          <span id="lessonCourt">コート1</span>
+          <span id="lessonCourt">コート{{ $court_num }}</span>
         </h1>
       </div>
 

@@ -139,13 +139,18 @@ class AdminController extends Controller
     /**
      * シフトフォーム画面を表示する
      */
-    public function dateShiftForm($date, $lesson_schedule_detail_id = null)
+    public function dateShiftForm($date, $lesson_time_slot_id, $court_num, $lesson_schedule_detail_id = null)
     {
         $year = substr($date, 0, 4);
         $month = substr($date, 4, 2);
         $day = substr($date, 6, 2);
+        $weekday = Carbon::parse($date)->format('D');
+        // $weekdayを日本語に変換
+        $weekday = str_replace(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], ['日', '月', '火', '水', '木', '金', '土'], $weekday);
         // $date(20240304)を-で2024-03-04のような形にする
         $date = ScheduleService::convertDateToHyphenFormat($date); // サービス関数を使用
+        $lessonTimeSlot = LessonTimeSlot::find($lesson_time_slot_id);
+
         // レッスン情報を取得
         $lesssonMaster = LessonMaster::all();
         $staffs = Staff::all();
@@ -169,6 +174,6 @@ class AdminController extends Controller
             // 生徒一覧を取得
             $students = Student::all();
         }
-        return view('admin.date.shift_form', compact('date', 'lesson_schedule_detail_id', 'students', 'lessonScheduleDetail', 'lesssonMaster', 'staffs'));
+        return view('admin.date.shift_form', compact('year', 'month', 'day', 'weekday', 'date', 'lesson_schedule_detail_id', 'students', 'lessonScheduleDetail', 'lesssonMaster', 'staffs', 'court_num', 'lessonTimeSlot'));
     }
 }

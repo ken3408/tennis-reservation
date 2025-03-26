@@ -14,7 +14,6 @@ $(document).ready(function () {
   // 状態管理
   const state = {
     lessonInfo: {
-      date: "2025年3月10日（月）",
       timeSlot: "B時間帯（12:30～14:00）",
       court: "コート1",
       isAvailable: "あり",
@@ -43,7 +42,6 @@ $(document).ready(function () {
 
   // 初期表示の設定
   function initializeDisplay() {
-    $("#lessonDate").text(state.lessonInfo.date);
     $("#lessonTimeSlot").text(formatTimeSlot(state.lessonInfo.timeSlot));
     $("#lessonCourt").text(state.lessonInfo.court);
     $("#lessonAvailability").val(state.lessonInfo.isAvailable);
