@@ -81,9 +81,11 @@ $(document).ready(function () {
       $.each(state.students, function (index, student) {
         const row = $("<tr>");
 
-        $("<td>").text(student.id).appendTo(row);
+        $("<td>").text(student.student_number).appendTo(row);
         $("<td>").text(student.name).appendTo(row);
-        $("<td>").text(student.level).appendTo(row);
+        $("<td>")
+          .text(student.lesson_master ? student.lesson_master.name : "未設定")
+          .appendTo(row);
 
         const actionCell = $("<td>");
         const removeButton = $("<button>")
@@ -176,7 +178,11 @@ $(document).ready(function () {
 
             const levelSpan = $("<p>")
               .addClass("student-level")
-              .text(`レベル: ${student.level}`);
+              .text(
+                `レベル: ${
+                  student.lesson_master ? student.lesson_master.name : "未設定"
+                }`
+              );
 
             studentInfo.append(nameSpan, levelSpan);
             listItem.append(studentInfo);
@@ -380,11 +386,28 @@ $(document).ready(function () {
     // フォーム送信
     $("#lessonForm").on("submit", function (e) {
       e.preventDefault();
-      console.log("保存されたレッスン情報:", {
-        ...state.lessonInfo,
+
+      // 保存するデータを準備
+      const formData = {
+        lessonInfo: state.lessonInfo,
         students: state.students,
+      };
+
+      // サーバーにデータを送信
+      $.ajax({
+        url: "/api/lesson/save", // 保存用のAPIエンドポイント
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        success: function (response) {
+          console.log("保存成功:", response);
+          showSaveSuccessMessage(); // 保存成功メッセージを表示
+        },
+        error: function (error) {
+          console.error("保存失敗:", error);
+          alert("保存に失敗しました。もう一度お試しください。");
+        },
       });
-      showSaveSuccessMessage();
     });
   }
 

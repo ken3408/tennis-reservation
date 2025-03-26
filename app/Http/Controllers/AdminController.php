@@ -49,7 +49,7 @@ class AdminController extends Controller
         $saturdayJrLessonScadules = LessonScheduleRepository::getSchedulesForMonth($year, $month, self::SATURDAY_JR);
         $saturdayJrScheduleData = ScheduleService::generateScheduleData($saturdayJrLessonScadules, self::SATURDAY_JR);
 
-        return view('admin.index', compact('year', 'month', 'lessonMasters', 'staffs', 'lessonTimeSlot', 'scheduleData', 'weekEndScheduleData', 'saturdayJrScheduleData'));
+        return view('admin.shift.month.index', compact('year', 'month', 'lessonMasters', 'staffs', 'lessonTimeSlot', 'scheduleData', 'weekEndScheduleData', 'saturdayJrScheduleData'));
     }
 
     /**
@@ -109,7 +109,7 @@ class AdminController extends Controller
      */
     public function dateIndex(Request $request)
     {
-        return view('admin.date.index');
+        return view('admin.shift.date.index');
     }
 
     /**
@@ -133,13 +133,39 @@ class AdminController extends Controller
         // lesson_schedulesをlesson_time_slot_id毎に配列分け (サービスクラスに移動)
         $lessons = ScheduleService::getLessonsGroupedByTimeSlotByCourt($date, $lessonTimeSlots);
 
-        return view('admin.date.shift', compact('year', 'month', 'day', 'weekday', 'lessonTimeSlots', 'lessons'));
+        return view('admin.shift.date.detail', compact('year', 'month', 'day', 'weekday', 'lessonTimeSlots', 'lessons'));
     }
 
     /**
      * シフトフォーム画面を表示する
      */
-    public function dateShiftForm($date, $lesson_time_slot_id, $court_num, $lesson_schedule_detail_id = null)
+    public function dateShiftCreateForm($date, $lesson_time_slot_id, $court_num)
+    {
+        $year = substr($date, 0, 4);
+        $month = substr($date, 4, 2);
+        $day = substr($date, 6, 2);
+        $weekday = Carbon::parse($date)->format('D');
+        // $weekdayを日本語に変換
+        $weekday = str_replace(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], ['日', '月', '火', '水', '木', '金', '土'], $weekday);
+        // $date(20240304)を-で2024-03-04のような形にする
+        $date = ScheduleService::convertDateToHyphenFormat($date); // サービス関数を使用
+        $lessonTimeSlot = LessonTimeSlot::find($lesson_time_slot_id);
+
+        // レッスン情報を取得
+        $lesssonMaster = LessonMaster::all();
+        $staffs = Staff::all();
+
+        // lesson_schedule_detail_idがなければ、新規作成
+        $lessonScheduleDetail = new LessonScheduleDetail();
+        // $lessonScheduleDetail->date = $date;
+        // 生徒一覧を取得
+        $students = Student::all();
+        return view('admin.shift.date.create_form', compact('year', 'month', 'day', 'weekday', 'date', 'students', 'lessonScheduleDetail', 'lesssonMaster', 'staffs', 'court_num', 'lessonTimeSlot'));
+    }
+    /**
+     * シフトフォーム画面を表示する
+     */
+    public function dateShiftStoreForm($date, $lesson_time_slot_id, $court_num, $lesson_schedule_detail_id)
     {
         $year = substr($date, 0, 4);
         $month = substr($date, 4, 2);
@@ -158,22 +184,12 @@ class AdminController extends Controller
 
 
         $lessonScheduleDetail = null;
-
-        // lesson_schedule_detail_idがあれば、lesson_schedule_detailを取得
-        if ($lesson_schedule_detail_id) {
-            $lessonScheduleDetail = LessonScheduleDetail::where('id', $lesson_schedule_detail_id)
-                ->with(['lessonSchedule.lessonMaster', 'lessonSchedule.mainCoach', 'lessonSchedule.subCoach', 'lessonSchedule.lessonTimeSlot'])
-                ->first();
-            $students = LessonStudentRecord::where('lesson_schedule_detail_id', $lesson_schedule_detail_id)
-                ->with('student')
-                ->get();
-        } else {
-            // lesson_schedule_detail_idがなければ、新規作成
-            $lessonScheduleDetail = new LessonScheduleDetail();
-            // $lessonScheduleDetail->date = $date;
-            // 生徒一覧を取得
-            $students = Student::all();
-        }
-        return view('admin.date.shift_form', compact('year', 'month', 'day', 'weekday', 'date', 'lesson_schedule_detail_id', 'students', 'lessonScheduleDetail', 'lesssonMaster', 'staffs', 'court_num', 'lessonTimeSlot'));
+        $lessonScheduleDetail = LessonScheduleDetail::where('id', $lesson_schedule_detail_id)
+            ->with(['lessonSchedule.lessonMaster', 'lessonSchedule.mainCoach', 'lessonSchedule.subCoach', 'lessonSchedule.lessonTimeSlot'])
+            ->first();
+        $students = LessonStudentRecord::where('lesson_schedule_detail_id', $lesson_schedule_detail_id)
+            ->with('student')
+            ->get();
+        return view('admin.shift.date.create_form', compact('year', 'month', 'day', 'weekday', 'date', 'lesson_schedule_detail_id', 'students', 'lessonScheduleDetail', 'lesssonMaster', 'staffs', 'court_num', 'lessonTimeSlot'));
     }
 }

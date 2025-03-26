@@ -260,7 +260,7 @@
                       <td>{{ $lesson['main_coach']['last_name'] }}
                         {{ $lesson['main_coach']['first_name'] }}</td>
                       <td>
-                        <a href="{{ route('admin.shift.form', [
+                        <a href="{{ route('admin.shift.store.form', [
                             'date' => sprintf('%04d%02d%02d', $year, $month, $day),
                             'lesson_time_slot_id' => $lesson['lesson_time_slot_id'],
                             'court_num' => $court_num,
@@ -272,7 +272,7 @@
                       <td></td>
                       <td></td>
                       <td>
-                        <a href="{{ route('admin.shift.form', [
+                        <a href="{{ route('admin.shift.create.form', [
                             'date' => sprintf('%04d%02d%02d', $year, $month, $day),
                             'lesson_time_slot_id' => $lesson['lesson_time_slot_id'],
                             'court_num' => $court_num,
