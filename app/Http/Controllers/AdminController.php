@@ -190,6 +190,6 @@ class AdminController extends Controller
         $students = LessonStudentRecord::where('lesson_schedule_detail_id', $lesson_schedule_detail_id)
             ->with('student')
             ->get();
-        return view('admin.shift.date.create_form', compact('year', 'month', 'day', 'weekday', 'date', 'lesson_schedule_detail_id', 'students', 'lessonScheduleDetail', 'lesssonMaster', 'staffs', 'court_num', 'lessonTimeSlot'));
+        return view('admin.shift.date.store_form', compact('year', 'month', 'day', 'weekday', 'date', 'lesson_schedule_detail_id', 'students', 'lessonScheduleDetail', 'lesssonMaster', 'staffs', 'court_num', 'lessonTimeSlot'));
     }
 }

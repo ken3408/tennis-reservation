@@ -514,98 +514,26 @@
 <body>
   <div class="container">
     <form id="lessonForm" class="form">
-      <div class="header">
-        <button type="button" class="back-button" id="backButton">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"
-            style="margin-right: 4px;">
-            <path d="m12 19-7-7 7-7"></path>
-            <path d="M19 12H5"></path>
-          </svg>
-          戻る
-        </button>
-        <h1 class="page-title">
-          <span id="lessonDate">{{ $year }}年{{ $month }}月{{ $day }}日（{{ $weekday }}）</span>
-          <span class="separator">|</span>
-          <span id="lessonTimeSlot" class="time-slot">{{ $lessonTimeSlot->class_name }}
-            {{ $lessonTimeSlot->start_time }}〜{{ $lessonTimeSlot->end_time }}</span>
-          <span class="separator">|</span>
-          <span id="lessonCourt">コート{{ $court_num }}</span>
-        </h1>
-      </div>
-
+      @include('components.admin.shift.date.form.header', [
+          'year' => $year,
+          'month' => $month,
+          'day' => $day,
+          'weekday' => $weekday,
+          'lessonTimeSlot' => $lessonTimeSlot,
+          'court_num' => $court_num,
+      ])
       <div class="form-section">
         <div class="form-grid">
           <div class="form-group">
-            <label for="lessonAvailability" class="form-label">レッスン:</label>
-            <select id="lessonAvailability" class="form-control" style="width: 200px;">
-              <option value="あり">あり</option>
-              <option value="なし">なし</option>
-            </select>
-          </div>
-
-          <div class="form-group" id="cancelReasonGroup" style="display: none;">
-            <label for="cancelReason" class="form-label">中止理由:</label>
-            <textarea id="cancelReason" class="form-control form-textarea" placeholder="中止理由を入力してください"></textarea>
+            {{-- レベル --}}
+            @include('components.admin.shift.date.form.level_selector', [
+                'lesssonMaster' => $lesssonMaster,
+            ])
           </div>
 
           <div class="form-group">
-            <div class="level-header">
-              <label for="level" class="form-label">レベル:</label>
-              <button type="button" id="levelEditButton" class="button button-ghost level-edit-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"
-                  style="margin-right: 4px;">
-                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
-                </svg>
-                編集
-              </button>
-              <div id="levelEditActions" class="hidden">
-                <button type="button" id="levelCancelButton" class="button button-ghost level-edit-button">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="icon" style="margin-right: 4px;">
-                    <path d="M18 6 6 18"></path>
-                    <path d="m6 6 12 12"></path>
-                  </svg>
-                  キャンセル
-                </button>
-                <button type="button" id="levelConfirmButton" class="button button-ghost level-edit-button"
-                  style="color: hsl(var(--primary));">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" class="icon" style="margin-right: 4px;">
-                    <path d="M20 6 9 17l-5-5"></path>
-                  </svg>
-                  確定
-                </button>
-              </div>
-            </div>
-            <div id="levelReadOnly" class="form-readonly">初級</div>
-            <select id="levelSelect" class="form-control hidden">
-              @foreach ($lesssonMaster as $lesson)
-                <option value="{{ $lesson->name }}">{{ $lesson->name }}</option>
-              @endforeach
-              {{-- <option value="初級">初級</option>
-              <option value="2">3</option>
-              <option value="中級">中級</option>
-              <option value="中上級">中上級</option>
-              <option value="上級">上級</option> --}}
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="coach" class="form-label">コーチ:</label>
-            <select id="coach" class="form-control">
-              @foreach ($staffs as $staff)
-                <option value="{{ $staff->last_name }}{{ $staff->first_name }}">
-                  {{ $staff->last_name }}{{ $staff->first_name }}</option>
-              @endforeach
-            </select>
-            <div class="checkbox-group">
-              <input type="checkbox" id="isSubstitute" class="checkbox">
-              <label for="isSubstitute" class="checkbox-label">代行コーチ</label>
-            </div>
+            {{-- コーチ --}}
+            @include('components.admin.shift.date.form.coach_selector', ['staffs' => $staffs])
           </div>
 
           <div class="form-group">
@@ -631,8 +559,7 @@
             <div id="searchCard" class="card hidden">
               <div class="card-header">
                 <div class="search-form">
-                  <input type="text" id="searchInput" class="form-control search-input"
-                    placeholder="生徒番号または名前で検索">
+                  <input type="text" id="searchInput" class="form-control search-input" placeholder="生徒番号または名前で検索">
                   <button type="button" id="clearSearchButton" class="button button-ghost button-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -672,8 +599,8 @@
                 <button type="button" id="emptyAddButton" class="button button-outline button-sm"
                   style="margin-top: 0.5rem;">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" style="margin-right: 4px;">
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    style="margin-right: 4px;">
                     <path d="M5 12h14"></path>
                     <path d="M12 5v14"></path>
                   </svg>

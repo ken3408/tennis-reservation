@@ -14,12 +14,11 @@ $(document).ready(function () {
   // 状態管理
   const state = {
     lessonInfo: {
-      timeSlot: "B時間帯（12:30～14:00）",
-      court: "コート1",
-      isAvailable: "あり",
-      cancelReason: "",
+      timeSlot: "",
+      court_num: $("#lessonCourt").data("court_num"), // Bladeから取得
       level: "初級",
       coach: "佐藤次郎",
+      coachId: null,
       isSubstitute: false,
     },
     students: [],
@@ -31,41 +30,16 @@ $(document).ready(function () {
     tempLevel: "初級",
   };
 
-  // タイムスロットの表示形式を整形
-  function formatTimeSlot(timeSlot) {
-    const match = timeSlot.match(/([A-Z])時間帯（(.+)）/);
-    if (match && match.length >= 3) {
-      return `${match[1]} ${match[2]}`;
-    }
-    return timeSlot;
-  }
-
   // 初期表示の設定
   function initializeDisplay() {
-    $("#lessonTimeSlot").text(formatTimeSlot(state.lessonInfo.timeSlot));
-    $("#lessonCourt").text(state.lessonInfo.court);
-    $("#lessonAvailability").val(state.lessonInfo.isAvailable);
-    $("#cancelReason").val(state.lessonInfo.cancelReason);
     $("#levelReadOnly").text(state.lessonInfo.level);
     $("#levelSelect").val(state.lessonInfo.level);
     $("#coach").val(state.lessonInfo.coach);
     $("#isSubstitute").prop("checked", state.lessonInfo.isSubstitute);
 
-    // レッスン有無による中止理由の表示/非表示
-    toggleCancelReasonVisibility();
-
     // 生徒一覧の表示
     updateStudentList();
     updateCapacityDisplay();
-  }
-
-  // レッスン有無による中止理由の表示/非表示
-  function toggleCancelReasonVisibility() {
-    if ($("#lessonAvailability").val() === "なし") {
-      $("#cancelReasonGroup").show();
-    } else {
-      $("#cancelReasonGroup").hide();
-    }
   }
 
   // 生徒一覧の更新
@@ -288,17 +262,6 @@ $(document).ready(function () {
       window.history.back();
     });
 
-    // レッスン有無の変更
-    $("#lessonAvailability").on("change", function () {
-      state.lessonInfo.isAvailable = $(this).val();
-      toggleCancelReasonVisibility();
-    });
-
-    // 中止理由の変更
-    $("#cancelReason").on("input", function () {
-      state.lessonInfo.cancelReason = $(this).val();
-    });
-
     // レベル編集ボタン
     $("#levelEditButton").on("click", function () {
       toggleLevelEditMode(true);
@@ -335,7 +298,9 @@ $(document).ready(function () {
 
     // コーチの変更
     $("#coach").on("change", function () {
-      state.lessonInfo.coach = $(this).val();
+      const selectedOption = $(this).find(":selected");
+      state.lessonInfo.coachId = selectedOption.data("coach_id");
+      state.lessonInfo.coach = selectedOption.val();
     });
 
     // 代行コーチのチェック
