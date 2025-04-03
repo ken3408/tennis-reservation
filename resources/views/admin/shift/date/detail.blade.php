@@ -261,10 +261,7 @@
                         {{ $lesson['main_coach']['first_name'] }}</td>
                       <td>
                         <a href="{{ route('admin.shift.store.form', [
-                            'date' => sprintf('%04d%02d%02d', $year, $month, $day),
-                            'lesson_time_slot_id' => $lesson['lesson_time_slot_id'],
-                            'court_num' => $court_num,
-                            'lesson_schedule_detail_id' => $lesson['lesson_schedule_detail_id'] ?? null,
+                            'lesson_schedule_detail_id' => $lesson['lesson_schedule_detail_id'],
                         ]) }}"
                           class="edit-button">編集</a>
                       </td>

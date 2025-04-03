@@ -230,6 +230,14 @@ class ScheduleService
   }
 
   /**
+   * 日付をハイフンなし形式 (YYYYMMDD) に変換する
+   */
+  public static function convertDateToYYYYMMDDFormat($date)
+  {
+    return str_replace('-', '', $date);
+  }
+
+  /**
    * 日付から平日か休日を判定し、対応するLessonTimeSlotを取得する
    */
   public static function getLessonTimeSlotsByDate($date)

@@ -28,7 +28,5 @@ Route::get('/admin/shift/{date}', [AdminController::class, 'dateShift'])->name('
 Route::get('/admin/shift/{date}/{lesson_time_slot_id}/{court_num}', [AdminController::class, 'dateShiftCreateForm'])
   ->where('date', '\d{8}') // ← 8桁の数字を受け取る
   ->name('admin.shift.create.form'); //　登録画面
-Route::get('/admin/shift/{date}/{lesson_time_slot_id}/{court_num}/{lesson_schedule_detail_id?}', [AdminController::class, 'dateShiftStoreForm'])
-  ->where('date', '\d{8}') // ← 8桁の数字を受け取る
-  ->where('lesson_schedule_detail_id', '[0-9]+')
+Route::get('/admin/shift/store/{lesson_schedule_detail_id}', [AdminController::class, 'dateShiftStoreForm'])
   ->name('admin.shift.store.form'); //　更新画面

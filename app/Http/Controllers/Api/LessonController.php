@@ -13,7 +13,6 @@ class LessonController extends Controller
   {
     $lessonInfo = $request->input('lessonInfo');
     $students = $request->input('students');
-    dd($lessonInfo, $students);
 
     if ($lessonInfo['isSubstitute']) {
       // 代行の場合は代行理由が必須

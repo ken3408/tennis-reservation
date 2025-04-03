@@ -2,8 +2,10 @@
   <label for="coach" class="form-label">コーチ:</label>
   <select id="coach" class="form-control">
     @foreach ($staffs as $staff)
-      <option value="{{ $staff->last_name }}{{ $staff->first_name }}" data-coach_id="{{ $staff->id }}">
-        {{ $staff->last_name }}{{ $staff->first_name }}</option>
+      <option value="{{ $staff->last_name }}{{ $staff->first_name }}" data-coach_id="{{ $staff->id }}"
+        @if ($staff->id == $staffId) selected @endif>
+        {{ $staff->last_name }}{{ $staff->first_name }}
+      </option>
     @endforeach
   </select>
   <div class="checkbox-group">
