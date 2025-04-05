@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\LessonSchedule;
 use App\Models\LessonTimeSlot;
+use App\Models\LessonStudentRecord;
 use Carbon\Carbon;
 use App\Repositories\LessonScheduleRepository; // 追加
 use App\Models\LessonScheduleDetail; // 追加
@@ -244,5 +245,28 @@ class ScheduleService
   {
     $weekdayType = Carbon::parse($date)->isWeekend() ? 'WEEKENDDAY' : 'WEEKDAY';
     return LessonTimeSlot::where('weekday_type', $weekdayType)->get();
+  }
+
+  /**
+   * 指定されたスケジュール詳細IDに基づいて予約された生徒情報を取得する
+   */
+  public static function getReservedStudentsByScheduleDetailId($lessonScheduleDetailId)
+  {
+    return LessonStudentRecord::where('lesson_schedule_detail_id', $lessonScheduleDetailId)
+      ->where('status', 'RESERVED')
+      ->with(['student', 'student.lessonMaster']) // lessonMasterをロード
+      ->get()
+      ->map(function ($record) {
+        return [
+          'id' => $record->student->id,
+          'num' => $record->student->student_number,
+          'name' => $record->student->name,
+          'level' => $record->student->lessonMaster->name,
+          // 'lesson_master' => [
+          //   'id' => $record->student->lessonMaster->id ?? null,
+          //   'name' => $record->student->lessonMaster->name ?? null,
+          // ],
+        ];
+      });
   }
 }

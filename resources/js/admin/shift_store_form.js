@@ -1,32 +1,21 @@
 $(document).ready(function () {
-  // サンプルデータ
-  const SAMPLE_STUDENTS = [
-    { id: "S001", name: "伊藤健太", level: "初級" },
-    { id: "S002", name: "中村美咲", level: "初中級" },
-    { id: "S003", name: "小林大輔", level: "中級" },
-    { id: "S004", name: "加藤由美", level: "初級" },
-    { id: "S005", name: "渡辺隆", level: "上級" },
-    { id: "S006", name: "松本さくら", level: "中上級" },
-    { id: "S007", name: "井上拓也", level: "初中級" },
-    { id: "S008", name: "木村真理", level: "中級" },
-  ];
-
   // 状態管理
   const state = {
     lessonInfo: {
-      date: "2025年3月10日（月）",
-      timeSlot: "B時間帯（12:30～14:00）",
-      court: "コート1",
       isAvailable: "あり",
       cancelReason: "",
       level: $("#levelReadOnly").data("level"),
       coach: "",
       isSubstitute: false,
     },
-    existingStudents: [
-      { id: "S001", name: "伊藤健太", level: "初級" },
-      { id: "S004", name: "加藤由美", level: "初級" },
-    ],
+    existingStudents: existingStudentsData || [],
+    student: {
+      id: null,
+      num: null,
+      name: "",
+      level: "",
+    },
+
     addedStudents: [],
     canceledStudents: [],
     searchTerm: "",
@@ -34,14 +23,11 @@ $(document).ready(function () {
     isSearching: false,
     maxCapacity: 8,
     isLevelEditable: false,
-    tempLevel: "初級",
+    tempLevel: "",
   };
 
   // 要素の参照を取得
   const elements = {
-    lessonDate: $("#lessonDate"),
-    lessonTimeSlot: $("#lessonTimeSlot"),
-    lessonCourt: $("#lessonCourt"),
     lessonAvailability: $("#lessonAvailability"),
     cancelReasonGroup: $("#cancelReasonGroup"),
     cancelReason: $("#cancelReason"),
@@ -82,6 +68,7 @@ $(document).ready(function () {
     lessonForm: $("#lessonForm"),
   };
 
+  // --- ユーティリティ関数 ---
   // 現在の生徒数を計算
   function getCurrentStudentCount() {
     return (
@@ -91,11 +78,9 @@ $(document).ready(function () {
     );
   }
 
+  // --- 初期化処理 ---
   // 初期表示の設定
   function initializeDisplay() {
-    elements.lessonDate.text(state.lessonInfo.date);
-    elements.lessonTimeSlot.text(formatTimeSlot(state.lessonInfo.timeSlot));
-    elements.lessonCourt.text(state.lessonInfo.court);
     elements.lessonAvailability.val(state.lessonInfo.isAvailable);
     elements.cancelReason.val(state.lessonInfo.cancelReason);
     elements.levelReadOnly.text(state.lessonInfo.level);
@@ -109,12 +94,7 @@ $(document).ready(function () {
     updateCapacityDisplay();
   }
 
-  // タイムスロットの表示形式を整形
-  function formatTimeSlot(timeSlot) {
-    const match = timeSlot.match(/([A-Z])時間帯（(.+)）/);
-    return match && match.length >= 3 ? `${match[1]} ${match[2]}` : timeSlot;
-  }
-
+  // --- UI更新関数 ---
   // レッスン有無による中止理由の表示/非表示
   function toggleCancelReasonVisibility() {
     if (elements.lessonAvailability.val() === "なし") {
@@ -131,18 +111,18 @@ $(document).ready(function () {
     );
 
     if (filteredStudents.length > 0) {
-      elements.existingStudentsTable.removeClass("hidden");
-      elements.emptyExistingStudents.addClass("hidden");
       elements.existingStudentsBody.empty();
 
       filteredStudents.forEach((student) => {
         const row = $("<tr>");
-        row.append($("<td>").text(student.id));
+        row.append($("<td>").text(student.num));
         row.append($("<td>").text(student.name));
         row.append($("<td>").text(student.level));
         const actionCell = $("<td>");
         const cancelButton = $("<button>")
           .addClass("button button-ghost button-icon")
+          .attr("data-student-id", student.id)
+          .attr("data-action", "cancel")
           .html(
             `
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -156,9 +136,6 @@ $(document).ready(function () {
         row.append(actionCell);
         elements.existingStudentsBody.append(row);
       });
-    } else {
-      elements.existingStudentsTable.addClass("hidden");
-      elements.emptyExistingStudents.removeClass("hidden");
     }
   }
 
@@ -171,9 +148,13 @@ $(document).ready(function () {
 
       state.addedStudents.forEach((student) => {
         const row = $("<tr>").addClass("bg-green-50");
-        row.append($("<td>").text(student.id));
+        row.append($("<td>").text(student.student_number));
         row.append($("<td>").text(student.name));
-        row.append($("<td>").text(student.level));
+        row.append(
+          $("<td>").text(
+            student.lesson_master ? student.lesson_master.name : "未設定"
+          )
+        );
         const actionCell = $("<td>");
         const removeButton = $("<button>")
           .addClass("button button-ghost button-icon")
@@ -226,53 +207,74 @@ $(document).ready(function () {
   function updateSearchResults() {
     if (state.searchTerm.trim() === "") {
       state.searchResults = [];
-      elements.searchResultsList.empty();
-      elements.noResults.addClass("hidden");
+      $("#searchResults").addClass("hidden");
+      $("#noResults").addClass("hidden");
       return;
     }
 
-    const existingIds = new Set([
-      ...state.existingStudents.map((s) => s.id),
-      ...state.addedStudents.map((s) => s.id),
-    ]);
+    // サーバーから検索結果を取得
+    $.ajax({
+      url: "/api/students/search",
+      method: "GET",
+      data: { query: state.searchTerm },
+      success: function (data) {
+        state.searchResults = data;
 
-    state.searchResults = SAMPLE_STUDENTS.filter(
-      (student) =>
-        !existingIds.has(student.id) &&
-        (student.id.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
-          student.name.includes(state.searchTerm))
-    );
+        // 検索結果の表示
+        if (state.searchResults.length > 0) {
+          $("#searchResults").removeClass("hidden");
+          $("#noResults").addClass("hidden");
 
-    if (state.searchResults.length > 0) {
-      elements.searchResultsList.empty();
-      elements.noResults.addClass("hidden");
+          // 検索結果リストをクリア
+          $("#searchResultsList").empty();
 
-      state.searchResults.forEach((student) => {
-        const listItem = $("<li>");
-        const isDisabled = getCurrentStudentCount() >= state.maxCapacity;
+          // 検索結果の表示部分
+          $.each(state.searchResults, function (index, student) {
+            const listItem = $("<li>").addClass("student-item");
 
-        listItem.addClass(
-          `student-item clickable ${isDisabled ? "disabled" : ""}`
-        );
-        listItem.html(`
-          <div>
-            <p class="student-name">
-              ${student.name} <span class="student-id">(${student.id})</span>
-            </p>
-            <p class="student-level">レベル: ${student.level}</p>
-          </div>
-        `);
+            const studentInfo = $("<div>").addClass("student-info");
 
-        if (!isDisabled) {
-          listItem.on("click", () => addStudent(student));
+            const nameSpan = $("<p>")
+              .addClass("student-name")
+              .html(
+                `${student.name} <span class="student-id">(${student.student_number})</span>`
+              );
+
+            const levelSpan = $("<p>")
+              .addClass("student-level")
+              .text(
+                `レベル: ${
+                  student.lesson_master ? student.lesson_master.name : "未設定"
+                }`
+              );
+
+            studentInfo.append(nameSpan, levelSpan);
+            listItem.append(studentInfo);
+
+            // 生徒項目全体をクリックできるようにする
+            listItem.on("click", function () {
+              if (state.existingStudents.length < state.maxCapacity) {
+                addStudent(student);
+              }
+            });
+
+            // 定員に達している場合は選択できないようにする
+            if (state.existingStudents.length >= state.maxCapacity) {
+              listItem.css("opacity", "0.5");
+              listItem.css("cursor", "not-allowed");
+            }
+
+            $("#searchResultsList").append(listItem);
+          });
+        } else {
+          $("#searchResults").addClass("hidden");
+          $("#noResults").removeClass("hidden");
         }
-
-        elements.searchResultsList.append(listItem);
-      });
-    } else {
-      elements.searchResultsList.empty();
-      elements.noResults.removeClass("hidden");
-    }
+      },
+      error: function () {
+        console.error("生徒データの取得に失敗しました");
+      },
+    });
   }
 
   // 定員表示の更新
@@ -292,6 +294,16 @@ $(document).ready(function () {
 
   // 生徒を追加
   function addStudent(student) {
+    const isAlreadyExisting = state.existingStudents.some(
+      (s) => s.id === student.id
+    );
+    const isAlreadyAdded = state.addedStudents.some((s) => s.id === student.id);
+
+    if (isAlreadyExisting || isAlreadyAdded) {
+      alert("この生徒は既に登録済み、または追加済みです。");
+      return;
+    }
+
     if (getCurrentStudentCount() < state.maxCapacity) {
       state.addedStudents.push(student);
       state.searchTerm = "";
@@ -380,7 +392,7 @@ $(document).ready(function () {
     elements.levelDialog.addClass("hidden");
   }
 
-  // イベントリスナーの設定
+  // --- イベントリスナー ---
   function setupEventListeners() {
     elements.backButton.on("click", () => window.history.back());
     elements.lessonAvailability.on("change", () => {
@@ -427,8 +439,9 @@ $(document).ready(function () {
     elements.addStudentButton.on("click", () => {
       toggleSearchCard(!state.isSearching);
     });
-    elements.searchInput.on("input", (e) => {
-      state.searchTerm = e.target.value;
+    // 検索入力
+    $("#searchInput").on("input", function () {
+      state.searchTerm = $(this).val();
       updateSearchResults();
     });
     elements.clearSearchButton.on("click", () => {
@@ -444,11 +457,25 @@ $(document).ready(function () {
         addedStudents: state.addedStudents,
         canceledStudents: state.canceledStudents,
       });
-      alert("レッスン情報が保存されました");
+      // alert("レッスン情報が保存されました");
     });
+    elements.existingStudentsBody.on(
+      "click",
+      ".cancel-student-button",
+      function () {
+        let student = state.student;
+        student.id = $(this).data("student-id");
+        student.num = $(this).data("student-num");
+        student.name = $(this).data("student-num");
+        student.level = $(this).data("student-level");
+        if (student) {
+          cancelStudent(student);
+        }
+      }
+    );
   }
 
-  // 初期化
+  // --- アプリケーションの初期化 ---
   function initialize() {
     initializeDisplay();
     setupEventListeners();

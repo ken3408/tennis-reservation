@@ -527,13 +527,17 @@
           <div class="form-group">
             {{-- レベル --}}
             @include('components.admin.shift.date.form.level_selector', [
-                'lesssonMaster' => $lesssonMaster,
+                'lessonMaster' => $lessonMaster,
+                'lessonMasterId' => '',
             ])
           </div>
 
           <div class="form-group">
             {{-- コーチ --}}
-            @include('components.admin.shift.date.form.coach_selector', ['staffs' => $staffs])
+            @include('components.admin.shift.date.form.coach_selector', [
+                'staffs' => $staffs,
+                'staffId' => '',
+            ])
           </div>
 
           <div class="form-group">

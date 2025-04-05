@@ -30,13 +30,19 @@
       </button>
     </div>
   </div>
-  <div id="levelReadOnly" class="form-readonly"
-    data-level="{{ $lesssonMaster->firstWhere('id', $lesssonMasterId)?->name }}">
-    {{ $lesssonMaster->firstWhere('id', $lesssonMasterId)?->name ?? '未設定' }}
-  </div>
+  @if (empty($lessonMasterId))
+    <div id="levelReadOnly" class="form-readonly">
+      未設定
+    </div>
+  @else
+    <div id="levelReadOnly" class="form-readonly"
+      data-level="{{ $lessonMaster->firstWhere('id', $lessonMasterId)?->name }}">
+      {{ $lessonMaster->firstWhere('id', $lessonMasterId)?->name }}
+    </div>
+  @endif
   <select id="levelSelect" class="form-control hidden">
-    @foreach ($lesssonMaster as $lesson)
-      <option value="{{ $lesson->id }}" {{ $lesson->id == $lesssonMasterId ? 'selected' : '' }}>
+    @foreach ($lessonMaster as $lesson)
+      <option value="{{ $lesson->id }}" {{ $lesson->id == $lessonMasterId ? 'selected' : '' }}>
         {{ $lesson->name }}
       </option>
     @endforeach

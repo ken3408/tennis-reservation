@@ -152,7 +152,7 @@ class AdminController extends Controller
     $lessonTimeSlot = LessonTimeSlot::find($lesson_time_slot_id);
 
     // レッスン情報を取得
-    $lesssonMaster = LessonMaster::all();
+    $lessonMaster = LessonMaster::all();
     $staffs = Staff::all();
 
     // lesson_schedule_detail_idがなければ、新規作成
@@ -160,7 +160,7 @@ class AdminController extends Controller
     // $lessonScheduleDetail->date = $date;
     // 生徒一覧を取得
     $students = Student::all();
-    return view('admin.shift.date.create_form', compact('year', 'month', 'day', 'weekday', 'date', 'students', 'lessonScheduleDetail', 'lesssonMaster', 'staffs', 'court_num', 'lessonTimeSlot'));
+    return view('admin.shift.date.create_form', compact('year', 'month', 'day', 'weekday', 'date', 'students', 'lessonScheduleDetail', 'lessonMaster', 'staffs', 'court_num', 'lessonTimeSlot'));
   }
   /**
    * シフトフォーム画面を表示する
@@ -183,14 +183,14 @@ class AdminController extends Controller
     $date = ScheduleService::convertDateToHyphenFormat($date); // サービス関数を使用
     $lessonTimeSlot = LessonTimeSlot::find($lessonScheduleDetail->lessonSchedule->lesson_time_slot_id);
     // レッスン情報を取得
-    $lesssonMaster = LessonMaster::all();
+    $lessonMaster = LessonMaster::all();
     $staffs = Staff::all();
     // コート番号を取得
     $court_num = $lessonScheduleDetail->lessonSchedule->court_num;
 
-    $students = LessonStudentRecord::where('lesson_schedule_detail_id', $lesson_schedule_detail_id)
-      ->with('student')
-      ->get();
-    return view('admin.shift.date.store_form', compact('year', 'month', 'day', 'weekday', 'date', 'lesson_schedule_detail_id', 'students', 'lessonScheduleDetail', 'lesssonMaster', 'staffs', 'court_num', 'lessonTimeSlot'));
+    // すでに予約されている生徒を取得
+    $students = ScheduleService::getReservedStudentsByScheduleDetailId($lesson_schedule_detail_id);
+
+    return view('admin.shift.date.store_form', compact('year', 'month', 'day', 'weekday', 'date', 'lesson_schedule_detail_id', 'students', 'lessonScheduleDetail', 'lessonMaster', 'staffs', 'court_num', 'lessonTimeSlot'));
   }
 }

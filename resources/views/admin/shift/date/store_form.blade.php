@@ -539,8 +539,8 @@
           <div class="form-group">
             {{-- レベル --}}
             @include('components.admin.shift.date.form.level_selector', [
-                'lesssonMaster' => $lesssonMaster,
-                'lesssonMasterId' => $lessonScheduleDetail->lessonSchedule->lesson_master_id,
+                'lessonMaster' => $lessonMaster,
+                'lessonMasterId' => $lessonScheduleDetail->lessonSchedule->lesson_master_id,
             ])
           </div>
 
@@ -559,7 +559,8 @@
                 <div class="capacity-badge">
                   <span id="currentCapacity" class="capacity-current available">0</span>
                   <span>/</span>
-                  <span id="maxCapacity">8</span>
+                  <span
+                    id="maxCapacity">{{ $lessonMaster->firstWhere('id', $lessonScheduleDetail->lessonSchedule->lesson_master_id)?->max_participants }}</span>
                   <button type="button" class="capacity-edit" id="editCapacity" aria-label="最大人数を編集">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -585,7 +586,30 @@
                     </tr>
                   </thead>
                   <tbody id="existingStudentsBody">
-                    <!-- 既存の生徒がここに表示されます -->
+
+                    {{-- @forelse ($students as $student)
+                      <tr>
+                        <td>{{ $student['num'] }}</td>
+                        <td>{{ $student['name'] }}</td>
+                        <td>{{ $student['level'] }}</td>
+                        <td>
+                          <button type="button" class="button button-ghost button-icon cancel-student-button"
+                            data-student-id="{{ $student['id'] }}" data-action="cancel"
+                            data-student-num="{{ $student['num'] }}" data-student-name="{{ $student['name'] }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round">
+                              <path d="M18 6 6 18"></path>
+                              <path d="m6 6 12 12"></path>
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    @empty
+                      {{-- <tr>
+                        <td colspan="4" class="empty-message">登録済みの生徒はいません</td>
+                      </tr> --}}
+                    {{-- @endforelse --}}
                   </tbody>
                 </table>
                 <div id="emptyExistingStudents" class="empty-state hidden">
@@ -707,7 +731,9 @@
     </div>
   </div>
 
-  <script></script>
+  <script>
+    const existingStudentsData = @json($students);
+  </script>
 </body>
 
 </html>

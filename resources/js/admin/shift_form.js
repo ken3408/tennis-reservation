@@ -1,16 +1,4 @@
 $(document).ready(function () {
-  // サンプルデータ
-  const SAMPLE_STUDENTS = [
-    { id: "S001", name: "伊藤健太", level: "初級" },
-    { id: "S002", name: "中村美咲", level: "初中級" },
-    { id: "S003", name: "小林大輔", level: "中級" },
-    { id: "S004", name: "加藤由美", level: "初級" },
-    { id: "S005", name: "渡辺隆", level: "上級" },
-    { id: "S006", name: "松本さくら", level: "中上級" },
-    { id: "S007", name: "井上拓也", level: "初中級" },
-    { id: "S008", name: "木村真理", level: "中級" },
-  ];
-
   // 状態管理
   const state = {
     lessonInfo: {

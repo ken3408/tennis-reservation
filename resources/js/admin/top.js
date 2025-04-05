@@ -28,17 +28,6 @@ $(document).ready(function () {
     var reserveButtons = $(".js-reservation-button");
     var cancelButton = $("#cancel-button");
 
-    // modal.fadeIn();
-
-    // cancelButton.on("click", function () {
-    //   modal.fadeOut();
-    // });
-
-    // $(window).on("click", function (event) {
-    //   if ($(event.target).is(modal)) {
-    //     modal.hide();
-    //   }
-    // });
     // データをバックエンドに送信
     const data = {
       year_month: yearMonth,
