@@ -12,3 +12,6 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/students/search', [StudentController::class, 'search']);
 Route::post('/lesson/save', [LessonController::class, 'save']);
+Route::put('/lesson/save', [LessonController::class, 'save']);
+Route::put('/lesson/update', [LessonController::class, 'update']);
+Route::put('/lesson/update/{lessonScheduleDetailId}', [LessonController::class, 'update']);

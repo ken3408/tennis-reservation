@@ -1,14 +1,17 @@
 $(document).ready(function () {
+  const url = window.location.href;
   // 状態管理
   const state = {
     lessonInfo: {
+      lessonScheduleDetailId: url.substring(url.lastIndexOf("/") + 1),
       isAvailable: "あり",
       cancelReason: "",
+      lessonId: $("#levelSelect").find(":selected").data("lesson_id"),
       level: $("#levelReadOnly").data("level"),
-      coach: "",
+      coachId: $("#coach").find(":selected").data("coach_id"), // 修正: 初期値を取得
       isSubstitute: false,
     },
-    existingStudents: existingStudentsData || [],
+    existingStudents: existingStudentsData,
     student: {
       id: null,
       num: null,
@@ -378,8 +381,9 @@ $(document).ready(function () {
 
   // レベル変更の確認ダイアログを表示
   function showLevelChangeDialog() {
+    const lessonName = state.lessonInfo.lessonName || "未設定"; // lessonNameを取得
     elements
-      .levelChangeDescription.text(`レベルを「${state.lessonInfo.level}」から「${state.tempLevel}」に変更しますか？
+      .levelChangeDescription.text(`レッスンを「${state.lessonInfo.level}」から「${state.tempLevel}」に変更しますか？
 レベルの変更は生徒の参加資格に影響する可能性があります。`);
     elements.levelDialog.removeClass("hidden");
   }
@@ -388,6 +392,11 @@ $(document).ready(function () {
   function confirmLevelChange() {
     state.lessonInfo.level = state.tempLevel;
     elements.levelReadOnly.text(state.lessonInfo.level);
+
+    // data-lesson-idを取得してstate.lessonInfo.lessonIdに設定
+    const selectedOption = elements.levelSelect.find(":selected");
+    state.lessonInfo.lessonId = selectedOption.data("lesson-id");
+
     toggleLevelEditMode(false);
     elements.levelDialog.addClass("hidden");
   }
@@ -421,7 +430,8 @@ $(document).ready(function () {
       confirmLevelChange();
     });
     elements.coach.on("change", () => {
-      state.lessonInfo.coach = elements.coach.val();
+      const selectedOption = elements.coach.find(":selected");
+      state.lessonInfo.coachId = selectedOption.data("coach_id"); // 修正: 選択されたコーチIDを取得
     });
     elements.isSubstitute.on("change", () => {
       state.lessonInfo.isSubstitute = elements.isSubstitute.prop("checked");
@@ -451,13 +461,34 @@ $(document).ready(function () {
     });
     elements.lessonForm.on("submit", (e) => {
       e.preventDefault();
-      console.log("保存されたレッスン情報:", {
-        ...state.lessonInfo,
-        existingStudents: state.existingStudents,
-        addedStudents: state.addedStudents,
-        canceledStudents: state.canceledStudents,
-      });
-      // alert("レッスン情報が保存されました");
+
+      // 保存ボタンが押された場合のみ処理を実行
+      if ($(e.originalEvent.submitter).is("button[type='submit']")) {
+        // 保存するデータを準備
+        const formData = {
+          lessonInfo: state.lessonInfo,
+          existingStudents: state.existingStudents,
+          addedStudents: state.addedStudents,
+          canceledStudents: state.canceledStudents,
+        };
+
+        // サーバーにデータを送信
+        $.ajax({
+          url: `/api/lesson/update/${state.lessonInfo.lessonScheduleDetailId}`, // 更新用の新しいAPIエンドポイント
+          method: "PUT", // PUTメソッド
+          contentType: "application/json",
+          data: JSON.stringify(formData),
+          success: function (response) {
+            console.log("更新成功:", response);
+            alert("レッスン情報が更新されました");
+            location.reload(); // ページを再読み込み
+          },
+          error: function (error) {
+            console.error("更新失敗:", error);
+            alert("更新に失敗しました。もう一度お試しください。");
+          },
+        });
+      }
     });
     elements.existingStudentsBody.on(
       "click",

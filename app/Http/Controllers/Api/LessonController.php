@@ -6,47 +6,66 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LessonSchedule;
 use App\Models\LessonScheduleDetail;
+use App\Models\LessonStudentRecord;
+use Illuminate\Support\Facades\DB;
 
 class LessonController extends Controller
 {
   public function save(Request $request)
   {
+    $lessonScheduleDetailId = $request->query('lessonScheduleDetailId');
     $lessonInfo = $request->input('lessonInfo');
-    $students = $request->input('students');
+    $existingStudents = $request->input('existingStudents');
+    $addedStudents = $request->input('addedStudents');
+    $canceledStudents = $request->input('canceledStudents');
 
-    if ($lessonInfo['isSubstitute']) {
-      // 代行の場合は代行理由が必須
-      if (empty($lessonInfo['cancelReason'])) {
-        return response()->json(['message' => '代行理由を入力してください'], 400);
-      }
-      // レッスンスケジュールを保存
-      $lessonSchedule = LessonScheduleDetail::create([
-        'is_main_substituted' => true,
-        'sub_staff_id' => $lessonInfo['court'],
-        'staff_id' => $lessonInfo['coachId'],
-        'is_main_substituted' => $lessonInfo['isSubstitute'],
-        'cancel_reason' => $lessonInfo['cancelReason'],
-      ]);
+    // レッスンスケジュール詳細を取得
+    $lessonScheduleDetail = LessonScheduleDetail::find($lessonScheduleDetailId);
+    if (!$lessonScheduleDetail) {
+      return response()->json(['message' => 'レッスンスケジュールが見つかりません'], 404);
     }
 
-    // レッスンスケジュールを保存
-    $lessonSchedule = LessonSchedule::create([
-      'lesson_time_slot_id' => $lessonInfo['timeSlotId'],
-      'court_num' => $lessonInfo['court'],
+    // レッスンスケジュール詳細を更新
+    $lessonScheduleDetail->update([
       'staff_id' => $lessonInfo['coachId'],
       'is_main_substituted' => $lessonInfo['isSubstitute'],
       'cancel_reason' => $lessonInfo['cancelReason'],
     ]);
 
-    // レッスンスケジュール詳細を保存
-    foreach ($students as $student) {
-      LessonScheduleDetail::create([
-        'lesson_schedule_id' => $lessonSchedule->id,
-        'student_id' => $student['id'],
-        'level' => $student['level'],
-      ]);
+    return response()->json(['message' => 'レッスン情報が更新されました'], 200);
+  }
+
+  public function update(Request $request, $lessonScheduleDetailId)
+  {
+    $lessonInfo = $request->input('lessonInfo');
+    $existingStudents = $request->input('existingStudents');
+    $addedStudents = $request->input('addedStudents');
+    $canceledStudents = $request->input('canceledStudents');
+
+    // レッスンスケジュール詳細を取得
+    $lessonScheduleDetail = LessonScheduleDetail::find($lessonScheduleDetailId);
+    if (!$lessonScheduleDetail) {
+      return response()->json(['message' => 'レッスンスケジュールが見つかりません'], 404);
     }
 
-    return response()->json(['message' => 'レッスン情報が保存されました'], 201);
+    DB::beginTransaction();
+    try {
+      // レッスンスケジュール詳細を更新
+      $lessonScheduleDetail->update([
+        'staff_id' => $lessonInfo['coachId'],
+        'is_main_substituted' => $lessonInfo['isSubstitute'],
+        'cancel_reason' => $lessonInfo['cancelReason'],
+      ]);
+
+      // 生徒の登録と削除を更新
+      LessonStudentRecord::updateStudentRecords($lessonScheduleDetailId, $addedStudents, $canceledStudents);
+
+      DB::commit();
+    } catch (\Exception $e) {
+      DB::rollBack();
+      return response()->json(['message' => '更新中にエラーが発生しました', 'error' => $e->getMessage()], 500);
+    }
+
+    return response()->json(['message' => 'レッスン情報が更新されました'], 200);
   }
 }

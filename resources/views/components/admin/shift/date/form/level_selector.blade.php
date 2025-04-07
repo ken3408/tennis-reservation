@@ -31,18 +31,20 @@
     </div>
   </div>
   @if (empty($lessonMasterId))
-    <div id="levelReadOnly" class="form-readonly">
+    <div id="levelReadOnly" class="form-readonly" data-level="未設定" data-lesson-name="{{ $lesson->name ?? '未設定' }}">
       未設定
     </div>
   @else
     <div id="levelReadOnly" class="form-readonly"
-      data-level="{{ $lessonMaster->firstWhere('id', $lessonMasterId)?->name }}">
+      data-level="{{ $lessonMaster->firstWhere('id', $lessonMasterId)?->name }}"
+      data-lesson-name="{{ $lesson->name ?? '未設定' }}">
       {{ $lessonMaster->firstWhere('id', $lessonMasterId)?->name }}
     </div>
   @endif
   <select id="levelSelect" class="form-control hidden">
     @foreach ($lessonMaster as $lesson)
-      <option value="{{ $lesson->id }}" {{ $lesson->id == $lessonMasterId ? 'selected' : '' }}>
+      <option data-lesson_id="{{ $lesson->id }}" value="{{ $lesson->name }}"
+        {{ $lesson->id == $lessonMasterId ? 'selected' : '' }}>
         {{ $lesson->name }}
       </option>
     @endforeach

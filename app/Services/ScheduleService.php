@@ -261,7 +261,7 @@ class ScheduleService
           'id' => $record->student->id,
           'num' => $record->student->student_number,
           'name' => $record->student->name,
-          'level' => $record->student->lessonMaster->name,
+          'level' => $record->student->lessonMaster->name ?? null,
           // 'lesson_master' => [
           //   'id' => $record->student->lessonMaster->id ?? null,
           //   'name' => $record->student->lessonMaster->name ?? null,
